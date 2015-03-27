@@ -42,12 +42,15 @@ class BaseGameMode(game.Mode):
         elif self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
             if (len(self.game.players) == 2):
+                self.game.players[1].player_stats['display_name'] = 'P2'
                 ### this is where the Player two display would turn on
                 self.game.lamps.canPlay2.enable()
             elif(len(self.game.players) == 3):
+                self.game.players[2].player_stats['display_name'] = 'P3'
                 ### this is where player three display would turn on
                 self.game.lamps.canPlay3.enable()
             elif(len(self.game.players) == 4):
+                self.game.players[3].player_stats['display_name'] = 'P4'
                 ### this is where player four display would turn on
                 self.game.lamps.canPlay4.enable()
 
@@ -61,8 +64,7 @@ class BaseGameMode(game.Mode):
         self.game.lampctrl.stop_show()
         ### adds player for player 1 game
         self.game.add_player()
-        ### player display name assignment needs to get moved to game.create_player
-        #self.game.utilities.set_player_stats('display_name', 'P1') 
+        self.game.utilities.set_player_stats('display_name', 'P1') 
         
         self.game.balls_per_game = 3 ###This needs to get moved to an user setting file
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')
@@ -123,7 +125,7 @@ class BaseGameMode(game.Mode):
                 self.log.info('last ball drained')
                 self.end_game()
 
-        ### increment the player, and game ball
+        ### Go back to first player, increment the game ball
             else:
                 self.game.current_player_index = 0
                 self.game.ball += 1
@@ -131,7 +133,7 @@ class BaseGameMode(game.Mode):
 
         ### not the last player drained
         else:
-            self.log.info('not last player drained')
+            self.log.info('not last player drained, going to next player')
             ### move to next player
             self.game.current_player_index += 1
             self.start_ball
