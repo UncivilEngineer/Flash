@@ -39,12 +39,8 @@ class Flashplayer(procgame.game.Player):
 ### Bonus and Status #####################################
         self.player_stats['bonus_x']=1
         self.player_stats['bonus']=5000
-        self.player_stats['rollOverValue']=0
         self.player_stats['eject_hole']=1
-
-### Jet Bumper State #####################################
-        self.player_stats['jetbumper_state']=0
-
+        
 ### Jackpot Stats ########################################
         self.player_stats['thunder']=False
         self.player_stats['lightning']=False
