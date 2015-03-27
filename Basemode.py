@@ -38,7 +38,18 @@ class BaseGameMode(game.Mode):
 ####Check to see if this is an active game or not
         if self.game.ball == 0:
             self.start_game()
-
+        ### add players if game is already started
+        elif self.game.ball == 1 and len(self.game.players) < 4:
+            self.game.add_player()
+            if (len(self.game.players) == 2):
+                ### this is where the Player two display would turn on
+                self.game.lamps.canPlay2.enable()
+            elif(len(self.game.players) == 3):
+                ### this is where player three display would turn on
+                self.game.lamps.canPlay3.enable()
+            elif(len(self.game.players) == 4):
+                ### this is where player four display would turn on
+                self.game.lamps.canPlay4.enable()
 
 
     def start_game(self):
@@ -48,10 +59,10 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.attract_mode)
         ##Shut down all lamp shows
         self.game.lampctrl.stop_show()
-        ####note, need to add display name to basic player stats
-        #### for now, just add the player, start ball 1
+        ### adds player for player 1 game
         self.game.add_player()
-        self.game.utilities.set_player_stats('display_name', 'P1')
+        ### player display name assignment needs to get moved to game.create_player
+        #self.game.utilities.set_player_stats('display_name', 'P1') 
         
         self.game.balls_per_game = 3 ###This needs to get moved to an user setting file
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')
@@ -66,8 +77,6 @@ class BaseGameMode(game.Mode):
         #### enable the flipper coils
         self.game.coils.flipperEnable.enable()
 
-        ### enable bumpers and slings? ######
-
         #### reset drop targets#####
         self.resetdroptargets()
         self.game.jetbumper_mode.jetReset()
@@ -77,8 +86,6 @@ class BaseGameMode(game.Mode):
 
         ###Change ball in play status from player####
         self.game.utilities.set_player_stats('ball_in_play',True)
-         
-        self.game.lamps.player1Up.enable()
         self.log.info('ball started: ' +str(self.game.ball))
         
         
@@ -125,6 +132,7 @@ class BaseGameMode(game.Mode):
         ### not the last player drained
         else:
             self.log.info('not last player drained')
+            ### move to next player
             self.game.current_player_index += 1
             self.start_ball
 
