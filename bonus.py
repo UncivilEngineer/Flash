@@ -20,6 +20,7 @@ class BonusGameMode(game.Mode):
     rollOverStatus3 = False
     rollOverStatus4 = False
     rollOverValue = 0
+    tempBonusValue = 0
     
     def __init__(self, game, priority):  
         super(BonusGameMode, self).__init__(game, priority)
@@ -36,7 +37,6 @@ class BonusGameMode(game.Mode):
         self.log.info("bonus values reset")
         self.game.utilities.set_player_stats('bonus', 0, 'set')
         self.game.utilities.set_player_stats('bonus_x', 1, 'set')
-        self.game.utilities.set_player_stats('rollOverValue', 0, 'set')
         self.rollOverStatus1 = False        
         self.rollOverStatus2 = False
         self.rollOverStatus3 = False
@@ -150,36 +150,31 @@ class BonusGameMode(game.Mode):
 ######################################################
 ### Award bonus section ##############################
 ######################################################
-
     def award_bonus(self):
         self.log.info("Bonus award reached")
-    
-    ### we have to hold these value now, because the stats
-    ### are used to update the lights
+        self.tempBonusValue = self._player_stats('bonus')
+        doAwardBonus(self)
 
-        bonusValue = self.game.utilities.get_player_stats('bonus')
+    def doAwardBonus(self):
+    ### we have to hold the value of tempBonus in order to use it to count down
         bonusMult  = self.game.utilities.get_player_stats('bonus_x')
-        playerScore = self.game.utilities.currentPlayerScore()
-        bonusList = [0,0]
 
+        if bonusMult >= 1:
+            if self.tempBonusValue >= 1000:
+                self.tempBonusValue = self.tempBonusValue - 1000
+                self.game.utilities.score(1000)
+                self.delay("bonus", delay = .1, handler = self.bonusloop)
+            elif self.tempBonusValue == 0:
+                self.game.utilities.set_player_stats('bonus_x', bonusMult -1, 'set')
+                self.tempBonusValue = self.utilities.get_player_stats('bonus')
+        else:
+            self.bonusReset()
 
-         #### for each bonus mulitiplier, it counts down
-        for x in range(bonusMult, 0, -1):
-            bonusList[0] = x
-
-            for y in range(bonusValue, 0, -100):
-                bonusList[1] = y
-                self.game.utilities.score(100)
-                 ##### it should call for display update here
-                #self.game.bonus.update_bonus_lights(bonusValue, bonusMult)
-                self.delay("bonus", delay=.25, handler = self.bonusloop, param= bonusList)
+    def bonusloop(self):
         
-        self.game.bonus.bonusReset()
-        self.game.bonus.update_bonus_lights_basic()
-    
-    def bonusloop(self, bonusList):
-        self.game.bonus.update_bonus_lights(bonusList[1], bonusList[0])
-        self.log.info("bonsu light delay called")
+        bonusX = self.game.utilities.get_player_stats('bonus_x')
+        self.game.bonus.update_bonus_lights(self.tempBonusValue, BonusX)
+        self.delay("bonus", delay = .1, handler = self.doAwardBonus)
         
             
 
