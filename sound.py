@@ -18,6 +18,12 @@ class Sound(game.Mode):
     def mode_started(self):
         pass
     
+    ############################
+    # Sound Test
+    ############################
+    #Sound test was written to try to determine what sounds exist at what address on the 
+    # William type 1 sound board.  The whole purpose of this function is to cycle
+    # throught the sounds (1 to 31) and play each one.
     def soundtest(self):
         self.log.info("sound test called, x is: " +str(self.soundCount))
         if self.soundCount < 32:
