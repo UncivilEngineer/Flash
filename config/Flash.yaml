@@ -1,0 +1,475 @@
+# P-ROC Game Description file for flash
+##setup by Uncivil engineer Copywrite 2015, all rights reserved
+PRGame:
+    machineType: wpc
+    #machinetype: wpcAlphanumeric
+    numBalls: 1
+PRFlippers:
+PRBumpers:
+   - leftKicker
+   - rightKicker
+   - rightJetBumper
+   - leftJetBumper
+   - lowerJetBumper
+
+PRSwitches:
+    # **** Format ****
+    # name:
+    #   number: <number>
+    #   type: <type>
+    #
+    #   <number> can be: SFx (Flipper switch, labeled Fx in WPC manual
+    #                    SDx (Dedicated switch, labeled SDx in WPC manual
+    #                    Sx  (Matrix switch, labeled x in WPC manual
+    #   <type> can be: 'NO' (normally open.  This is the default; so no need to use this)
+    #                  'NC' (normally closed.  Common for optos)
+    #No active flipper switches on flash, so far..
+    #flipperLwR:
+    #    number: SF3
+    #flipperLwL: 
+    #    number: SF4
+    # for direct connects, use J6
+    advance: 
+        number: SD8
+        label: 'Advance'
+    autoUp: 
+        number: SD6
+        label: 'auto up down toggle'
+    memoryLock: 
+        number: SD5
+        label: 'memory protection lock'
+    plumbTilt:
+        number: S11
+        label: 'plub-bob tilt'
+    rollTilt:
+        number: S12
+        label: 'ball roll tilt'
+    startButton:
+        number: S13
+        label: 'start Button'
+    rightCoin:
+        number: S14
+        label: 'right coin slot'
+    centerCoin:
+        number: S15
+        label: 'center coin slot'
+    leftCoin:
+        number: S16
+        lable: 'left coin slot'
+    slamTilt:
+        number: S17
+        label: 'slam tilt'
+    hiScoreReset:
+        number: S18
+        label: 'high score reset'
+    outerULStar:
+        number: S21
+        label: 'outside upper left star rollover'
+    innerULStar:
+        number: S22
+        label: 'inside upper left star rollover'
+    upperLstandup:
+        number: S23
+        label: 'upper left standup'
+    rollover1:
+        number: S24
+        label:  'One roll over'
+    rollover2:
+        number: S25
+        label: 'two roll over'
+    rollover3:
+        number: S26
+        label: 'three roll over'
+    rollover4:
+        number: S27
+        label:  'four roll over'
+    topRstandup:
+        number: S28
+        label: 'top right standup'
+    spinner:
+        number: S31
+        label: 'spinner'
+    leftJetBumper:
+        number: S32
+        label: 'left jet bumper'
+    rightJetBumper:
+        number: S33
+        lable: 'right jet bumper'
+    lowerJetBumper:
+        number: S34
+        label: 'lower jet bumper'
+    uRStar:
+        number: S35
+        label: 'upper right star'
+    cRStar:
+        number: S36
+        label: 'center right star'
+    lRStar:
+        number: S37
+        label: 'lower right star'
+    rSStandup:
+        number: S38
+        label: 'right side standup'
+    rsStandupCen:
+        number: S41
+        label: 'right side center standup'
+    rsStandupLower:
+        number: S42
+        label: 'right side standup lower'
+    ejectHole:
+        number: S43
+        label: 'eject hole'
+    rDropTarget3B:
+        number: S44
+        label: '3 bank right drop target'
+    cDropTarget3B:
+        number: S45
+        label: '3 bank center drop target'
+    lDropTarget3B:
+        number: S46
+        label: '3 bank left drop target'
+    all3BankDown:
+        number: S47
+        label: 'all 3 bank drop targets down'
+    fiveBankDT1:
+        number: S48
+        label: '5 bank drop target 1 top'
+    fiveBankDT2: 
+        number: S51
+        label: '5 bank drop target 2'
+    fiveBankDT3: 
+        number: S52
+        label: '5 bank drop target 3'
+    fiveBankDT4:
+        number: S53
+        label: '5 bank drop target 4'
+    fiveBankDT5:
+        number: S54
+        label: '5 bank drop target 5 bottom'
+    all5BankDown:
+        number: S55
+        label: 'all 5 bank drop targets down'
+    all5BankUp:
+        number: S56
+        label: 'all 5 bank drop targets up'
+    leftTarget:
+        number: S57
+        label: 'left target'
+    rightTarget:
+        number: S58
+        label: 'right target'
+    leftKicker: 
+        number: S61
+        label: 'left kicker'
+    rightKicker: 
+        number: S62
+        label: 'right kicker'
+    leftSpecial:
+        number: S63
+        label: 'left special'
+    leftFRLane:
+        number: S64
+        label: 'left flipper return lane'
+    rightFRLane:
+        number: S65
+        label: 'right flipper return lane'
+    rightSpecial:
+        number: S66
+        label: 'right special'
+    playfieldTilt:
+        number: S67
+        label: 'playfield tilt'
+    outHole:
+        number: S68
+        label: 'out hole'
+    s71:
+        number: S71
+    s72:
+        number: S72
+    s73:
+        number: S73
+    s74:
+        number: S74
+    s75:
+        number: S75
+    s76:
+        number: S76
+    s77:
+        number: S77
+    s78:
+        number: S78
+    s81:
+        number: S81
+    s82:
+        number: S82
+    s83:
+        number: S83
+    s84:
+        number: S84
+    s85:
+        number: S85
+    s86:
+        number: S86
+    s87:
+        number: S87
+    s88:
+        number: S88
+PRCoils:
+    ballRelease:
+        number: C01
+        label: 'ball release'
+    bank5reset1to3:
+        number: C02
+        label: '5 bank drop target reset 1 to 3'
+    bank5reset4to5:
+        number: C03
+        label: '5 bank drop target reset 4 to 5'
+    bank3reset:
+        number: C04
+        label: '3 bank drop target reset'
+    ejectHole:
+        number: C05
+        label: 'eject hole'
+    flashStrobe:
+        number: C06
+        label: 'FLASH insert strobe'
+    C07:
+        number: C07
+    C08:
+        number: C08
+    soundC09:
+        number: C09
+        label: 'sound C09'
+    soundC10:
+        number: C10
+        label: 'sound C10'
+    soundC11:
+        number: C11
+        label: 'sound C11'
+    soundC12:
+        number: C12
+        label: 'sound C12'
+    soundC13: 
+        number: C13
+        label: 'sound C13'
+    soundC14: 
+        number: C14
+        label: 'sound C14'
+    C15:
+        number: C15
+    coinLockOut:
+        number: C16
+        label: 'coin lock out'
+    rightJetBumper:
+        number: C17
+        label: 'right jet bumper'
+    leftJetBumper:
+        number: C18
+        label: 'left jet bumper'
+    lowerJetBumper:
+        number: C19
+        label: 'lower jet bumper'
+    rightKicker:
+        number: C20
+        label: 'right kicker'
+    leftKicker:
+        number: C21
+        label: 'left kicker'
+    c22:
+        number: C22
+    flipperEnable:
+        number: C23
+        label: 'flippers enable'
+PRLamps:
+    l11:
+        number: L11
+    bonus1000:
+        number: L12
+        label: '1000 Bonus'
+    bonus2000:
+        number: L13
+        label: '2000 Bonus'
+    bonus3000:
+        number: L14
+        label: '3000 Bonus'
+    bonus4000:
+        number: L15
+        label: '4000 Bonus'
+    bonus5000:
+        number: L16
+        label: '5000 Bonus'
+    bonus6000:
+        number: L17
+        label: '6000 Bonus'
+    bonus7000:
+        number: L18
+        label: '7000 Bonus'
+    bonus8000:
+        number: L21
+        label: '8000 Bonus'
+    bonus9000:
+        number: L22
+        label: '9000 Bonus'
+    l23:
+        number: L23
+    bonus10000:
+        number: L24
+        label: '10,000 Bonus'
+    bonus20000:
+        number: L25
+        label: '20,000 Bonus'
+    x2:
+        number: L26
+        label: '2x Bonus'
+    x3:
+        number: L27
+        label: '3x Bonus'
+    shootAgainP:
+        number: L28
+        label: 'Shoot Again Playfield'
+    thunder:
+        number: L31
+        label: 'THUNDER'
+    lightning:
+        number: L32
+        label: 'LIGHTNING'
+    tempest:
+        number: L33
+        label: 'TEMPEST'
+    superFLASH:
+        number: L34
+        label: 'SUPER FLASH'
+    leftSpecial:
+        number: L35
+        label: 'Left Special'
+    rightSpecial:
+        number: L36
+        label: 'Right Special'
+    left3BonusAdv:
+        number: L37
+        label: 'Left 3 Bonus Advance'
+    right3BonusAdv:
+        number: L38
+        label: 'Right 3 Bonus Advance'
+    fiveBank5Arrow:
+        number: L41
+        label: 'Five Bank 5 Arrow (lower)'
+    fiveBank4Arrow:
+        number: L42
+        label: 'Five Bank 4 Arrow'
+    fiveBank3Arrow:
+        number: L43
+        label: 'Five Bank 3 Arrow'
+    fiveBank2Arrow:
+        number: L44
+        label: 'Five Bank 2 Arrow'
+    fiveBank1Arrow:
+        number: L45
+        label: 'Five Bank 1 Arrow (bottom)'
+    threeBankRArrow:
+        number: L46
+        label: 'Three Bank Right Arrow'
+    threeBankCArrow:
+        number: L47
+        label: 'Three Bank Center Arrow'
+    threeBankLArrow:
+        number: L48
+        label: 'Three Bank Left Arrow'
+    ejectHole5000:
+        number: L51
+        label: '5000 Eject Hole'
+    ejectHole10000:
+        number: L52
+        label: '10,000 Eject Hole'
+    extraBallEjectHole:
+        number: L53
+        label: 'Extra Ball Eject Hole'
+    rollOver1:
+        number: L54
+        label: '1 Roll Over'
+    rollOver2:
+        number: L55
+        label: '2 Roll Over'
+    rollOver3:
+        number: L56
+        label: '3 Roll Over'
+    rollOver4:
+        number: L57
+        label: '4 Roll Over'
+    leftJetBumper:
+        number: L58
+        label: 'Left Jet Bumper'
+    rightJetBumper:
+        number: L61
+        label: 'Right Jet Bumper'
+    lowerJetBumper:
+        number: L62
+        label: 'Lower Jet Bumper'
+    upperLeftArrows:
+        number: L63
+        label: 'Upper Left Arrows'
+    spinnerAndRollover:
+        number: L64
+        label: 'Spinner and Upper Right Roll Over'
+    centerRightAndLowerStars:
+        number: L65
+        label: 'Center Right and Lower Right Star Roll Overs'
+    l66:
+        number: L66
+    l67:
+        number: L67
+    l68:
+        number: L68
+    l71:
+        number: L71
+    canPlay1:
+        number: L72
+        label: 'One Can Play'
+    canPlay2:
+        number: L73
+        label: 'Two Can Play'
+    canPlay3:
+        number: L74
+        label: 'Three Can Play'
+    canPlay4:
+        number: L75
+        label: 'Four Can Play'
+    Match:
+        number: L76
+        label: 'Match'
+    ballInPlay:
+        number: L77
+        label: 'Ball In Play'
+    Credits:
+        number: L78
+        label: 'Credits (playfield)'
+    player1Up:
+        number: L81
+        label: 'Player 1 Up'
+    player2Up:
+        number: L82
+        label: 'Player 2 Up'
+    Player3Up:
+        number: L83
+        label: 'Player 3 Up'
+    Player4Up:
+        number: L84
+        label: 'Player 4 Up'
+    tilt:
+        number: L85
+        label: 'Tilt'
+    gameOver:
+        number: L86
+        label: 'Game Over'
+    samePlayerShootAgain:
+        number: L87
+        label: 'Same Player Shoot Again (backbox)'
+    highScore:
+        number: L88
+        label: 'High Score (backbox)'
+    
+PRBallSave:
+    pulseCoils: 
+    resetSwitches:
+    stopSwitches:
+        
