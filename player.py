@@ -38,7 +38,7 @@ class Flashplayer(procgame.game.Player):
 
 ### Bonus and Status #####################################
         self.player_stats['bonus_x']=1
-        self.player_stats['bonus']=5000
+        self.player_stats['bonus']=1000
         self.player_stats['eject_hole']=1
         
 ### Jackpot Stats ########################################

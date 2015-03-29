@@ -77,14 +77,14 @@ class BaseGameMode(game.Mode):
         #### for now it's empty 
         #### ball display needs to be updated here
         #### enable the flipper coils
-        self.game.coils.flipperEnable.enable()
+        #self.game.coils.flipperEnable.enable()
 
         #### reset drop targets#####
-        self.resetdroptargets()
+        #self.resetdroptargets()
         self.game.jetbumper_mode.jetReset()
 
         ###after a delay, kick out ball
-        self.delay( name = 'wait for ball', event_type = None, delay = 2, handler= self.kickBallOut)
+        #self.delay( name = 'wait for ball', event_type = None, delay = 1, handler= self.kickBallOut)
 
         ###Change ball in play status from player####
         self.game.utilities.set_player_stats('ball_in_play',True)
@@ -107,6 +107,10 @@ class BaseGameMode(game.Mode):
         self.game.utilities.set_player_stats('ball_in_play',False)
 
         self.game.bonus.award_bonus()
+    ### in order to make sure the bonus gets added in before we start a new ball
+    ### it was necessary to split this function up.  award_bonus calls endBallCont()
+    
+    def endBallCont(self):
 
         ### check to see if there are any extra balls available ####
         if (self.game.utilities.get_player_stats('extra_balls') > 0):
@@ -164,20 +168,35 @@ class BaseGameMode(game.Mode):
 
     def sw_rSStandup_active(self, sw):
         self.game.utilities.score(10)
+        self.game.sound.playsound(1)
 
     def sw_rsStandupCen_active(self, sw):
         self.game.utilities.score(10)
+        self.game.sound.playsound(1)
 
     def sw_rsStandupLower_active(self, sw):
         self.game.utilities.score(10)
+        self.game.sound.playsound(1)
 
-#### basic Jet Bumper score handling #####################
+#### basic Kicker score handling #####################
         
-    def leftKicker_active(self, sw):
+    def sw_leftKicker_active(self, sw):
         self.game.utilities.score(100)
+        self.game.sound.playsound(3)
     
-    def rightKicker_active(self,sw):
+    def sw_rightKicker_active(self,sw):
         self.game.utilities.score(100)
+        self.game.sound.playsound(3)
+        
+#### basic star score handling #######################
+    
+    def sw_uRStar_active_for_10ms(self,sw):
+        self.game.utilities.score(100)
+        self.game.sound.playsound(2)
+        
+    def sw_lRStar_active_for_10ms(self,sw):
+        self.game.utilities.score(100)
+        self.game.sound.playsound(2)        
         
 #### eject hole handler ##################################
     def sw_ejectHole_active_for_100ms(self, sw):

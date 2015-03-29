@@ -44,7 +44,7 @@ class UtilitiesMode(game.Mode):
 ### Get the player stat#####################################
     def get_player_stats(self,id):
         if (self.game.ball <> 0):
-            self.log.info('Player Stats - get '+id+' is '+str(self.game.current_player().player_stats[id]))
+            #self.log.info('Player Stats - get '+id+' is '+str(self.game.current_player().player_stats[id]))
             return self.game.current_player().player_stats[id]
         else:
             return False

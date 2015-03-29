@@ -34,15 +34,19 @@ class BonusGameMode(game.Mode):
         self.bonusReset()
 
     def bonusReset(self):
-        self.log.info("bonus values reset")
-        self.game.utilities.set_player_stats('bonus', 0, 'set')
+        self.log.info("bonus reset is called")
+        self.game.utilities.set_player_stats('bonus', 1000, 'set')
         self.game.utilities.set_player_stats('bonus_x', 1, 'set')
-        self.rollOverStatus1 = False        
+        self.rollOverStatus1 = False
+        self.game.lamps.rollOver1.disable()
         self.rollOverStatus2 = False
+        self.game.lamps.rollOver2.disable()
         self.rollOverStatus3 = False
+        self.game.lamps.rollOver3.disable()
         self.rollOverStatus4 = False
+        self.game.lamps.rollOver4.disable()
         self.rollOverValue = 0
-        
+        self.update_bonus_lights_basic()
 
 ###################################################
 ### bonus light updating function #################
@@ -117,9 +121,10 @@ class BonusGameMode(game.Mode):
        
         if bonusValue >= 40000:
             for lamps in bonuslights:
-                lamps.schedule(schedule = 0xff00ff00ff, cycle_seconds=0, now=true)
+                lamps.schedule(schedule = 0xff00ff00ff, cycle_seconds=0, now=True)
 
-            self.game.lamps.bonus20000(schedule = 0xff00ff00ff, cycle_seconds=0, now=true)
+            self.game.lamps.bonus20000.schedule(schedule = 0xff00ff00ff, cycle_seconds=0, now=True)
+            lampcounter = 10
 
         elif bonusValue >= 30000 and bonusValue < 40000:
             self.game.lamps.bonus10000.enable()
@@ -152,29 +157,36 @@ class BonusGameMode(game.Mode):
 ######################################################
     def award_bonus(self):
         self.log.info("Bonus award reached")
-        self.tempBonusValue = self._player_stats('bonus')
-        doAwardBonus(self)
+        self.tempBonusValue = self.game.utilities.get_player_stats('bonus')
+        self.doAwardBonus()
 
     def doAwardBonus(self):
     ### we have to hold the value of tempBonus in order to use it to count down
         bonusMult  = self.game.utilities.get_player_stats('bonus_x')
+        self.log.info("doAwardBonus called")
 
         if bonusMult >= 1:
             if self.tempBonusValue >= 1000:
                 self.tempBonusValue = self.tempBonusValue - 1000
                 self.game.utilities.score(1000)
-                self.delay("bonus", delay = .1, handler = self.bonusloop)
+                self.delay("bonus", delay = .05, handler = self.bonusloop)
             elif self.tempBonusValue == 0:
-                self.game.utilities.set_player_stats('bonus_x', bonusMult -1, 'set')
-                self.tempBonusValue = self.utilities.get_player_stats('bonus')
+                self.log.info("inside tempbonus == 0")
+                self.game.utilities.set_player_stats('bonus_x', bonusMult - 1, 'set')
+                self.tempBonusValue = self.game.utilities.get_player_stats('bonus')
+                self.doAwardBonus()
         else:
+            self.log.info("doAwardBonus reached")
+            self.log.info("tempbonus is: " +str(self.tempBonusValue)+ " bonus x is: " +str(self.game.utilities.get_player_stats('bonus_x')))
             self.bonusReset()
+            self.update_bonus_lights_basic()
+            self.game.base_mode.endBallCont()
 
     def bonusloop(self):
-        
+        self.log.info("bonusloop called")
         bonusX = self.game.utilities.get_player_stats('bonus_x')
-        self.game.bonus.update_bonus_lights(self.tempBonusValue, BonusX)
-        self.delay("bonus", delay = .1, handler = self.doAwardBonus)
+        self.game.bonus.update_bonus_lights(self.tempBonusValue, bonusX)
+        self.delay("bonus", delay = .05, handler = self.doAwardBonus)
         
             
 
@@ -198,19 +210,6 @@ class BonusGameMode(game.Mode):
         else:
             pass
 
-########################################################
-#### Bonus switch handlers #############################
-########################################################
-
-    def sw_rightFRLane_active_for_10ms(self, sw):
-        self.game.utilities.score(1000)
-        self.game.utilities.set_player_stats('bonus', 1000, 'add')
-        self.update_bonus_lights_basic()
-
-    def sw_leftFRLane_active_for_10ms(self, sw):
-        self.game.utilities.score(1000)
-        self.game.utilities.set_player_stats('bonus', 1000, 'add')
-        self.update_bonus_lights_basic()
 
 #########################################################
 ### Bonus roll over handlers  ###########################

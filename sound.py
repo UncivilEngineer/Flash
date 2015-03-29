@@ -59,18 +59,18 @@ class Sound(game.Mode):
             ### for each digit so none get skipped
 
             if inputString[4] == '1':
-                self.game.coils.soundC09.schedule(schedule=0xff00000, cycle_seconds=1, now=False)
+                self.game.coils.soundC09.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
 
             if inputString[3] == '1':
-                self.game.coils.soundC10.schedule(schedule=0xff00000, cycle_seconds=1, now=False)
+                self.game.coils.soundC10.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
             
             if inputString[2] == '1':
-                self.game.coils.soundC11.schedule(schedule=0xff00000, cycle_seconds=1, now=False)
+                self.game.coils.soundC11.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
             
             if inputString[1] == '1':
-                self.game.coils.soundC12.schedule(schedule=0xff00000, cycle_seconds=1, now=False)
+                self.game.coils.soundC12.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
 
             if inputString[0] == '1':
-                self.game.coils.soundC13.schedule(schedule=0xff00000, cycle_seconds=1, now=False)
+                self.game.coils.soundC13.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
         else:
             self.log.info('bad call to playsound ' +str(x)+ 'was sent')     
