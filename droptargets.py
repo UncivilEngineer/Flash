@@ -116,6 +116,22 @@ class DropTargetMode(game.Mode):
         self.bank5hold = False
         ### after this pause, it resumes the target lights
         self.bank5blink()
+    
+    def updateEjectHoleLights(self):
+        #### shut down all eject hole lights
+        self.game.lamps.ejectHole5000.disable()
+        self.game.lamps.ejectHole10000.disable()
+        self.game.lamps.extraBallEjectHole.disable()
+        
+        ### set lamps based on eject_hole
+        eject_hole = self.game.utilities.get_player_stats('eject_hole')
+        
+        if eject_hole == 1:
+            self.game.lamps.ejectHole5000.enable()
+        elif eject_hole == 2:
+            self.game.lamps.ejectHole10000.enable()
+        elif eject_hole == 3:
+            self.game.lamps.extraBallEjectHole.enable()
         
 ########################################
 ####  drop target switch handlers ######
@@ -146,3 +162,27 @@ class DropTargetMode(game.Mode):
         #### actual light values are set when you hit the hole
         if ejectvalue < 3:
             self.game.utilities.set_player_stats('eject_hole', 1, 'add')
+            
+    def sw_ejectHole_active_for_100ms(self, sw):
+        eject_hole = self.game.utilities.get_player_stats('eject_hole')
+        eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
+        
+           ### first see if we need to increment made both locally, and in player stats
+        if eject_hole_made < eject_hole:
+            eject_hole_made = eject_hole_made + 1
+            self.game.utilities.set_player_stats('eject_hole_made', 1, 'add')
+        
+        ## now evaluate made
+        if eject_hole_made == 1:
+            self.game.utilities.score(5000)
+        if eject_hole_made == 2:
+            self.game.utilities.score(10000)
+        if eject_hole_made == 3:
+            self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
+            self.game.lamps.shoutAgainP.enable()
+            ## now reset eject hole values
+            self.game.utilities.set_player_stats('eject_hole', 1, 'set')
+            self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+
+        ## now update the lights
+        updateEjectHoleLights()
