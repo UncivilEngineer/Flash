@@ -123,15 +123,29 @@ class DropTargetMode(game.Mode):
         self.game.lamps.ejectHole10000.disable()
         self.game.lamps.extraBallEjectHole.disable()
         
-        ### set lamps based on eject_hole
+        ### set lamps based on eject_hole, or eject_hole made
         eject_hole = self.game.utilities.get_player_stats('eject_hole')
+        eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
         
-        if eject_hole == 1:
-            self.game.lamps.ejectHole5000.enable()
-        elif eject_hole == 2:
-            self.game.lamps.ejectHole10000.enable()
-        elif eject_hole == 3:
-            self.game.lamps.extraBallEjectHole.enable()
+        ## if they are equal, then we don't have any catch up to do on the eject hole
+        if eject_hole_made == eject_hole:
+        
+            if eject_hole == 1:
+                self.game.lamps.ejectHole5000.enable()
+            elif eject_hole == 2:
+                self.game.lamps.ejectHole10000.enable()
+            elif eject_hole == 3:
+                self.game.lamps.extraBallEjectHole.enable()
+        
+        ## if eject hole made is less, then we have cycled down the drop targets more than we have
+        ## made the eject hole.
+        elif eject_hole_made < eject_hole:
+            if eject_hole_made == 0: ## no hits on eject hole
+                self.game.lamps.ejectHole5000.enable()
+            elif eject_hole_made == 1:
+                self.game.lamps.ejectHole10000.enable()
+            elif eject_hole_made == 2:
+                self.game.lamps.extraBallEjectHole.enable()    
         
 ########################################
 ####  drop target switch handlers ######
