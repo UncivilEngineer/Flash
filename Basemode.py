@@ -77,7 +77,7 @@ class BaseGameMode(game.Mode):
         #### for now it's empty 
         #### ball display needs to be updated here
         #### enable the flipper coils
-        #self.game.coils.flipperEnable.enable()
+        self.game.coils.flipperEnable.enable()
 
         #### reset drop targets#####
         self.game.droptarget_mode.dropTargetsReset()
@@ -93,7 +93,7 @@ class BaseGameMode(game.Mode):
         
     def kickBallOut(self):
         self.log.info('kickout pulsed')
-        # self.game.coils.ballRelease.pulse(30)
+        self.game.coils.ballRelease.pulse(30)
 
     #def resetdroptargets(self):
     #    self.game.coils.bank3reset.pulse(50)
