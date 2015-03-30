@@ -189,6 +189,7 @@ class DropTargetMode(game.Mode):
         ## now evaluate made
         if eject_hole_made == 1:
             self.game.utilities.score(5000)
+            #add blinking lights?
         if eject_hole_made == 2:
             self.game.utilities.score(10000)
         if eject_hole_made == 3:
@@ -198,5 +199,8 @@ class DropTargetMode(game.Mode):
             self.game.utilities.set_player_stats('eject_hole', 1, 'set')
             self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
 
-        ## now update the lights
+        self.delay('ejectHoleDelay', delay = 1.5, handler = 'self.doEjectHole')
+        
+    def doEjectHole(self):
         updateEjectHoleLights()
+        self.game.coils.ejectHole.pulse(30)
