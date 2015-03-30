@@ -21,6 +21,7 @@ class DropTargetMode(game.Mode):
     
     bank3index = 0
     bank3lights=[]
+    bank3hold = False
     
     
     def __init__(self, game, priority):  
@@ -64,7 +65,7 @@ class DropTargetMode(game.Mode):
                 self.delay('5bankdelay', delay = 1, handler = self.bank5blinkdelay)
             else:
                 ### gets called if index is greater than 4
-                ### reset the index back to 0
+                ### reset the index back to 0, then enable the light
                 self.bank5index = 0
                 self.bank5lights[self.bank5index].enable()
                 ## call to the delay for next lamp
@@ -74,6 +75,9 @@ class DropTargetMode(game.Mode):
         
     def bank5blinkdelay(self):
         if self.bank5hold == False:
+            ### this method is basically a copy of bank5blink
+            ### both methods are used in sequense to create
+            ### a moving target effect
             ### first thing to do is turn off the old lights
             for lamps in self.bank5lights:
                 lamps.disable()
@@ -96,21 +100,22 @@ class DropTargetMode(game.Mode):
     def bank5scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
         if self.bank5index == index:
-            ###pause the blinking lights####
+            ###pause the target lights
+            ### and cancel the delay chain
             self.bank5hold == True
             self.cancel_delayed('5bankdelay')
             ### do a short blink ###
             self.bank5lights[self.bank5index].schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
             self.game.utilities.score(5000)
-            ####
+            #### pause for 1.5 seconds before restarting the target lights
             self.delay('bank5hold', delay = 1.5, handler =self.bank5resume)
         else:
             self.game.utilities.score(1000)
             
     def bank5resume(self):
         self.bank5hold = False
+        ### after this pause, it resumes the target lights
         self.bank5blink()
-        print("delay index is: " +str(self.bank5index))
         
 ########################################
 ####  drop target switch handlers ######
@@ -131,4 +136,13 @@ class DropTargetMode(game.Mode):
     
     def sw_fiveBankDT5_active(self,sw):
         self.bank5scorecheck(4)
-            
+        
+    def sw_all5BankDown_active(self, sw):
+        ejectvalue = self.game.utilities.get_player_stats('eject_hole')
+        #### eject_hole values
+        #### 1 = 5000 score
+        #### 2 = 10000 score
+        #### 3 = light extra ball
+        #### actual light values are set when you hit the hole
+        if ejectvalue < 3:
+            self.game.utilities.set_player_stats('eject_hole', 1, 'add')
