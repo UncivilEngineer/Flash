@@ -40,6 +40,7 @@ class Flashplayer(procgame.game.Player):
         self.player_stats['bonus_x']=1
         self.player_stats['bonus']=1000
         self.player_stats['eject_hole']=1
+        self.player_stats['eject_hole_made'] = 0
         
 ### Jackpot Stats ########################################
         self.player_stats['thunder']=False
