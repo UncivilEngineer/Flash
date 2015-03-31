@@ -80,11 +80,11 @@ class BaseGameMode(game.Mode):
         #self.game.coils.flipperEnable.enable()
 
         #### reset drop targets#####
-        #self.resetdroptargets()
+        self.game.droptarget_mode.dropTargetsReset()
         self.game.jetbumper_mode.jetReset()
 
         ###after a delay, kick out ball
-        #self.delay( name = 'wait for ball', event_type = None, delay = 1, handler= self.kickBallOut)
+        self.delay( name = 'wait for ball', event_type = None, delay = 1, handler= self.kickBallOut)
 
         ###Change ball in play status from player####
         self.game.utilities.set_player_stats('ball_in_play',True)
@@ -93,12 +93,12 @@ class BaseGameMode(game.Mode):
         
     def kickBallOut(self):
         self.log.info('kickout pulsed')
-        self.game.coils.ballRelease.pulse(30)
+        # self.game.coils.ballRelease.pulse(30)
 
-    def resetdroptargets(self):
-        self.game.coils.bank3reset.pulse(50)
-        self.game.coils.bank5reset1to3.future_pulse(50,45)
-        self.game.coils.bank5reset4to5.future_pulse(50,80)
+    #def resetdroptargets(self):
+    #    self.game.coils.bank3reset.pulse(50)
+    #    self.game.coils.bank5reset1to3.future_pulse(50,45)
+    #    self.game.coils.bank5reset4to5.future_pulse(50,80)
 
     def endBall(self):
         #### first thing we do is disable the fippers

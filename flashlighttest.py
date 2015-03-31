@@ -128,7 +128,15 @@ class Attract(game.Mode):
                 lamp.schedule(schedule=0x00000fff, cycle_seconds=0, now=False)
             i = i + 1
         #self.game.lampctrl.play_show('attractShow1', repeat = True )
-	self.game.sound_mode.playsound(5)
+	self.game.sound_mode.playsound(17)
+	self.delay('sound1', delay = 5, handler = self.soundbackup)
+    
+    def soundbackup(self):
+	self.game.sound_mode.playsound(18)
+	self.delay('sound2', delay = 5, handler = self.soundbackup2)
+    
+    def soundbackup2(self):
+	self.game.sound_mode.playsound(19)
 
     def sw_startButton_active_for_20ms(self, sw):
 	self.log.info("start button pressed")

@@ -51,7 +51,7 @@ class Sound(game.Mode):
             #### to google for this solution
 
             inputString = bin(x)[2:].zfill(5)
-            self.log.info("call for sound " +str(x))
+            #self.log.info("call for sound " +str(x))
             print("playing sound " +str(x))
 
             ### Now check for 1s, and schedule coils if it is present, note we are working
@@ -59,18 +59,20 @@ class Sound(game.Mode):
             ### for each digit so none get skipped
 
             if inputString[4] == '1':
-                self.game.coils.soundC09.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
-
+                #self.game.coils.soundC09.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
+                self.game.coils.soundC09.pulse(1)
             if inputString[3] == '1':
-                self.game.coils.soundC10.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
-            
+                #self.game.coils.soundC10.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
+                self.game.coils.soundC10.pulse(1)
             if inputString[2] == '1':
-                self.game.coils.soundC11.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
-            
+                #self.game.coils.soundC11.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
+                self.game.coils.soundC11.pulse(1)
             if inputString[1] == '1':
-                self.game.coils.soundC12.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
-
+                #self.game.coils.soundC12.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
+                self.game.coils.soundC12.pulse(1)
             if inputString[0] == '1':
-                self.game.coils.soundC13.schedule(schedule=0xffff000, cycle_seconds=1, now=False)
+                #self.game.coils.soundC13.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
+                self.game.coils.soundC13.pulse(1)
         else:
-            self.log.info('bad call to playsound ' +str(x)+ 'was sent')     
+            self.log.info('bad call to playsound ' +str(x)+ 'was sent')
+            
