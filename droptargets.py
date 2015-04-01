@@ -18,10 +18,17 @@ class DropTargetMode(game.Mode):
     bank5index = 0
     bank5lights = []
     bank5hold = False
+    bank5Reset = False
+    fiveBankDT1down = False
+    fiveBankDT2down = False
+    fiveBankDT3down = False
+    fiveBankDT4down = False
+    fiveBankDT5down = False
     
     bank3index = 0
     bank3lights=[]
     bank3hold = False
+    bank3Reset = False
     
     
     def __init__(self, game, priority):  
@@ -44,11 +51,29 @@ class DropTargetMode(game.Mode):
         
     def dropTargetsReset(self):
         #self.game.coils.bank3reset.pulse(50)
-        self.game.coils.bank5reset1to3.future_pulse(50,45)
-        self.game.coils.bank5reset4to5.future_pulse(50,80)
+        bank5DTreset()
         self.bank5index = 0
         self.bank5blink()
         #self.bank3blink()
+        
+    def bank5DTreset(self):
+        ## to keep from scoring going up, we need to change the reset flag
+        bank5Reset = True
+        ## then fire the reset coils, and add a delay so the switches don't get called
+        self.game.coils.bank5reset1to3.future_pulse(50,45)
+        self.game.coils.bank5reset4to5.future_pulse(50,80)
+        self.delay('5bankresetdelay', delay = .15, handler = self.bank5resetdelay)
+        
+    def bank5resetdelay(self):
+        ### turn off the reset flag so the DTs will score when they go down
+        bank5Reset = False
+        ### reset the down flags
+        fiveBankDT1down = False
+        fiveBankDT2down = False
+        fiveBankDT3down = False
+        fiveBankDT4down = False
+        fiveBankDT5down = False
+        
         
     def bank5blink(self):
         ###First check if we are in hold mode
@@ -112,11 +137,33 @@ class DropTargetMode(game.Mode):
             self.delay('bank5hold', delay = 1.5, handler =self.bank5resume)
         else:
             self.game.utilities.score(1000)
+        
+        ### the All Bank Down switch are notoriously for not closing when the bank is down, so I added a second check here
+        if self.fiveBankDT1down == True and self.fiveBankDT2down == True and self.fiveBankDT3down == True and self.fiveBankDT4down == True and self.fiveBankDT5down == True:
+            
+            ### if all the bank flags are down, it calls the all 5 down
+            self.bank5AllDown()
             
     def bank5resume(self):
         self.bank5hold = False
         ### after this pause, it resumes the target lights
         self.bank5blink()
+
+    def bank5AllDown(self):
+        ### This is called from either the all bank 5 down switch, or by the flag check if a target goes down.
+        ejectvalue = self.game.utilities.get_player_stats('eject_hole')
+        #### eject_hole values
+        #### 1 = 5000 score
+        #### 2 = 10000 score
+        #### 3 = light extra ball
+        #### actual light values are set when you hit the hole
+        if ejectvalue < 3:
+            self.game.utilities.set_player_stats('eject_hole', 1, 'add')
+        else:
+            self.game.utilities.set_player_stats('eject_hole', 0, 'set')
+        
+        self.updateEjectHoleLights()
+        self.bank5DTreset()
     
     def updateEjectHoleLights(self):
         #### shut down all eject hole lights
@@ -148,46 +195,44 @@ class DropTargetMode(game.Mode):
             elif eject_hole_made == 2:
                 self.game.lamps.extraBallEjectHole.enable()
         
-        ### the all down switch is notoriously flakey on flash machines, so I added this code incase it doesn't fire:
-        
-        if self.game.switches.fiveBankDT1.is_active() and self.game.switches.fiveBankDT2.is_active() and self.game.switches.fiveBankDT3.is_active() and self.game.switches.fiveBankDT4.is_active() and self.game.switches.fiveBankDT5.is_active():
-            self.sw_allBankDown_active()
         
 ########################################
 ####  drop target switch handlers ######
 ########################################
         
-    def sw_fiveBankDT1_active(self,sw):
-        ###send the index associated with switch to the checker
-        self.bank5scorecheck(0)
+    def sw_fiveBankDT1_closed_for_5ms(self,sw):
+        ## check if we are in reset mode first (happens when DTs are reset so they don't score going up)
+        if self.bank5Reset == False:
+            ## Set down flag
+            self.fiveBankDT1down = True
+            ## check scoring
+            self.bank5scorecheck(0)
             
-    def sw_fiveBankDT2_active(self,sw):
-        self.bank5scorecheck(1)
+    def sw_fiveBankDT2_closed_for_5ms(self,sw):
+        if self.bank5Reset == False:
+            self.fiveBankDT2down = True
+            self.bank5scorecheck(1)
+            
             
     def sw_fiveBankDT3_active(self,sw):
-        self.bank5scorecheck(2)   
+        if self.bank5Reset == False:
+            self.fiveBankDT3down = True
+            self.bank5scorecheck(2)   
     
     def sw_fiveBankDT4_active(self,sw):
-        self.bank5scorecheck(3)  
+        if self.bank5Reset == False:
+            self.fiveBankDT4down = True
+            self.bank5scorecheck(3)  
     
     def sw_fiveBankDT5_active(self,sw):
-        self.bank5scorecheck(4)
+        if self.bank5Reset == False:
+            self.fiveBankDT5down = True
+            self.bank5scorecheck(4)
         
     def sw_all5BankDown_active(self, sw):
-        ejectvalue = self.game.utilities.get_player_stats('eject_hole')
-        #### eject_hole values
-        #### 1 = 5000 score
-        #### 2 = 10000 score
-        #### 3 = light extra ball
-        #### actual light values are set when you hit the hole
-        if ejectvalue < 3:
-            self.game.utilities.set_player_stats('eject_hole', 1, 'add')
-        else:
-            self.game.utilities.set_player_stats('eject_hole', 0, 'set')
-        
-        self.updateEjectHoleLights()
-        self.game.coils.bank5reset1to3.future_pulse(50,45)
-        self.game.coils.bank5reset4to5.future_pulse(50,80)
+        if self.bank5Reset == False:
+            Bank5AllDown()
+
             
     def sw_ejectHole_active_for_100ms(self, sw):
         eject_hole = self.game.utilities.get_player_stats('eject_hole')
