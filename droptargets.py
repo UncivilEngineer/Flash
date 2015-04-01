@@ -99,6 +99,7 @@ class DropTargetMode(game.Mode):
     
     def bank5scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
+        self.game.bonus.update_bonus_lights_basic()
         if self.bank5index == index:
             ###pause the target lights
             ### and cancel the delay chain
@@ -145,7 +146,12 @@ class DropTargetMode(game.Mode):
             elif eject_hole_made == 1:
                 self.game.lamps.ejectHole10000.enable()
             elif eject_hole_made == 2:
-                self.game.lamps.extraBallEjectHole.enable()    
+                self.game.lamps.extraBallEjectHole.enable()
+        
+        ### the all down switch is notoriously flakey on flash machines, so I added this code incase it doesn't fire:
+        
+        if self.game.switches.fiveBankDT1.is_active() and self.game.switches.fiveBankDT2.is_active() and self.game.switches.fiveBankDT3.is_active() and self.game.switches.fiveBankDT4.is_active() and self.game.switches.fiveBankDT5.is_active():
+            self.sw_allBankDown_active()
         
 ########################################
 ####  drop target switch handlers ######
@@ -176,6 +182,12 @@ class DropTargetMode(game.Mode):
         #### actual light values are set when you hit the hole
         if ejectvalue < 3:
             self.game.utilities.set_player_stats('eject_hole', 1, 'add')
+        else:
+            self.game.utilities.set_player_stats('eject_hole', 0, 'set')
+        
+        self.updateEjectHoleLights()
+        self.game.coils.bank5reset1to3.future_pulse(50,45)
+        self.game.coils.bank5reset4to5.future_pulse(50,80)
             
     def sw_ejectHole_active_for_100ms(self, sw):
         eject_hole = self.game.utilities.get_player_stats('eject_hole')
@@ -189,18 +201,20 @@ class DropTargetMode(game.Mode):
         ## now evaluate made
         if eject_hole_made == 1:
             self.game.utilities.score(5000)
-            #add blinking lights?
+            self.game.lamps.ejectHole5000.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
         if eject_hole_made == 2:
             self.game.utilities.score(10000)
+            self.game.lamps.ejectHole10000.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
         if eject_hole_made == 3:
+            self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
             self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
-            self.game.lamps.shoutAgainP.enable()
+            self.game.lamps.shootAgainP.enable()
             ## now reset eject hole values
             self.game.utilities.set_player_stats('eject_hole', 1, 'set')
             self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
 
-        self.delay('ejectHoleDelay', delay = 1.5, handler = 'self.doEjectHole')
+        self.delay('ejectHoleDelay', delay = 1.5, handler = self.doEjectHole)
         
     def doEjectHole(self):
-        updateEjectHoleLights()
+        self.updateEjectHoleLights()
         self.game.coils.ejectHole.pulse(30)

@@ -82,6 +82,8 @@ class BaseGameMode(game.Mode):
         #### reset drop targets#####
         self.game.droptarget_mode.dropTargetsReset()
         self.game.jetbumper_mode.jetReset()
+        self.game.droptarget_mode.updateEjectHoleLights()
+        self.game.bonus.update_bonus_lights_basic()
 
         ###after a delay, kick out ball
         self.delay( name = 'wait for ball', event_type = None, delay = 1, handler= self.kickBallOut)
@@ -117,9 +119,11 @@ class BaseGameMode(game.Mode):
             self.log.info('extra ball available')
             eb = self.game.utilities.get_player_stats('extra_balls')
             self.game.utilities.set_player_stats('extra_balls', eb - 1)
-            self.start_ball()
+            
             if eb == 0:
                 self.game.lamps.shootAgainP.disable()
+            
+            self.start_ball()
 
         #### is this the last player?  ####
         elif self.game.current_player_index == len(self.game.players) -1:
@@ -146,7 +150,6 @@ class BaseGameMode(game.Mode):
         self.log.info('game ended')
         self.game.coils.flipperEnable.disable()
         self.game.reset()
-        #self.game.modes.add(self.game.attract_mode)
         
     def reset():
         self.game.ball = 0
@@ -198,10 +201,6 @@ class BaseGameMode(game.Mode):
         self.game.utilities.score(100)
         self.game.sound.playsound(2)        
         
-#### eject hole handler ##################################
-    def sw_ejectHole_active_for_100ms(self, sw):
-        self.game.utilities.score(1000)
-        self.game.coils.ejectHole.pulse(30)
 
 #### outhole handler #####################################
 
