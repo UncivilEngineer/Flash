@@ -51,14 +51,15 @@ class DropTargetMode(game.Mode):
         
     def dropTargetsReset(self):
         #self.game.coils.bank3reset.pulse(50)
-        bank5DTreset()
+        self.bank5DTreset()
         self.bank5index = 0
         self.bank5blink()
         #self.bank3blink()
         
     def bank5DTreset(self):
         ## to keep from scoring going up, we need to change the reset flag
-        bank5Reset = True
+        self.bank5Reset = True
+        self.log.info("bank 5 reset called")
         ## then fire the reset coils, and add a delay so the switches don't get called
         self.game.coils.bank5reset1to3.future_pulse(50,45)
         self.game.coils.bank5reset4to5.future_pulse(50,80)
@@ -66,13 +67,13 @@ class DropTargetMode(game.Mode):
         
     def bank5resetdelay(self):
         ### turn off the reset flag so the DTs will score when they go down
-        bank5Reset = False
         ### reset the down flags
-        fiveBankDT1down = False
-        fiveBankDT2down = False
-        fiveBankDT3down = False
-        fiveBankDT4down = False
-        fiveBankDT5down = False
+        self.fiveBankDT1down = False
+        self.fiveBankDT2down = False
+        self.fiveBankDT3down = False
+        self.fiveBankDT4down = False
+        self.fiveBankDT5down = False
+        self.bank5Reset = False
         
         
     def bank5blink(self):
@@ -205,23 +206,27 @@ class DropTargetMode(game.Mode):
         if self.bank5Reset == False:
             ## Set down flag
             self.fiveBankDT1down = True
+            self.log.info("five bank DT 1 dropped")
             ## check scoring
             self.bank5scorecheck(0)
             
     def sw_fiveBankDT2_closed_for_5ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT2down = True
+            self.log.info("five bank DT 2 dropped")
             self.bank5scorecheck(1)
             
             
     def sw_fiveBankDT3_active(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT3down = True
+            self.log.info("five bank DT 3 dropped")
             self.bank5scorecheck(2)   
     
     def sw_fiveBankDT4_active(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT4down = True
+            self.log.info("five bank DT 4 dropped")
             self.bank5scorecheck(3)  
     
     def sw_fiveBankDT5_active(self,sw):
@@ -231,7 +236,8 @@ class DropTargetMode(game.Mode):
         
     def sw_all5BankDown_active(self, sw):
         if self.bank5Reset == False:
-            Bank5AllDown()
+            self.log.info("five bank DT 5 dropped")
+            self.bank5AllDown()
 
             
     def sw_ejectHole_active_for_100ms(self, sw):
