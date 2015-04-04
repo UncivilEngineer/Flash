@@ -18,7 +18,7 @@ class DropTargetMode(game.Mode):
     bank5index = 0
     bank5lights = []
     bank5hold = False
-    bank5Reset = False
+    bank5Reset = True
     fiveBankDT1down = False
     fiveBankDT2down = False
     fiveBankDT3down = False
@@ -53,17 +53,20 @@ class DropTargetMode(game.Mode):
         #self.game.coils.bank3reset.pulse(50)
         self.bank5DTreset()
         self.bank5index = 0
+        self.cancel_delayed('5bankdelay')
+        self.updateEjectHoleLights()
         self.bank5blink()
         #self.bank3blink()
         
     def bank5DTreset(self):
         ## to keep from scoring going up, we need to change the reset flag
-        self.bank5Reset = True
+        self.bank5Reset = True 
         self.log.info("bank 5 reset called")
         ## then fire the reset coils, and add a delay so the switches don't get called
+        self.delay('5bankresetdelay', delay = .5 , handler = self.bank5resetdelay)
         self.game.coils.bank5reset1to3.future_pulse(50,45)
-        self.game.coils.bank5reset4to5.future_pulse(50,80)
-        self.delay('5bankresetdelay', delay = .15, handler = self.bank5resetdelay)
+        self.game.coils.bank5reset4to5.future_pulse(50,80)        
+        
         
     def bank5resetdelay(self):
         ### turn off the reset flag so the DTs will score when they go down
@@ -201,7 +204,7 @@ class DropTargetMode(game.Mode):
 ####  drop target switch handlers ######
 ########################################
         
-    def sw_fiveBankDT1_closed_for_5ms(self,sw):
+    def sw_fiveBankDT1_closed_for_10ms(self,sw):
         ## check if we are in reset mode first (happens when DTs are reset so they don't score going up)
         if self.bank5Reset == False:
             ## Set down flag
@@ -210,26 +213,26 @@ class DropTargetMode(game.Mode):
             ## check scoring
             self.bank5scorecheck(0)
             
-    def sw_fiveBankDT2_closed_for_5ms(self,sw):
+    def sw_fiveBankDT2_closed_for_10ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT2down = True
             self.log.info("five bank DT 2 dropped")
             self.bank5scorecheck(1)
             
             
-    def sw_fiveBankDT3_active(self,sw):
+    def sw_fiveBankDT3_closed_for_10ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT3down = True
             self.log.info("five bank DT 3 dropped")
             self.bank5scorecheck(2)   
     
-    def sw_fiveBankDT4_active(self,sw):
+    def sw_fiveBankDT4_closed_for_10ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT4down = True
             self.log.info("five bank DT 4 dropped")
             self.bank5scorecheck(3)  
     
-    def sw_fiveBankDT5_active(self,sw):
+    def sw_fiveBankDT5_closed_for_10ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT5down = True
             self.bank5scorecheck(4)

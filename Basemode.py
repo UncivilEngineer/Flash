@@ -97,11 +97,6 @@ class BaseGameMode(game.Mode):
         self.log.info('kickout pulsed')
         self.game.coils.ballRelease.pulse(30)
 
-    #def resetdroptargets(self):
-    #    self.game.coils.bank3reset.pulse(50)
-    #    self.game.coils.bank5reset1to3.future_pulse(50,45)
-    #    self.game.coils.bank5reset4to5.future_pulse(50,80)
-
     def endBall(self):
         #### first thing we do is disable the fippers
         self.log.info('ball drained, in endball')
