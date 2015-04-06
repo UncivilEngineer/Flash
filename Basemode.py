@@ -115,7 +115,7 @@ class BaseGameMode(game.Mode):
             eb = self.game.utilities.get_player_stats('extra_balls')
             self.game.utilities.set_player_stats('extra_balls', eb - 1)
             
-            if eb == 0:
+            if eb - 1 == 0:
                 self.game.lamps.shootAgainP.disable()
             
             self.start_ball()
