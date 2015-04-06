@@ -194,7 +194,11 @@ class BaseGameMode(game.Mode):
         
     def sw_lRStar_active_for_10ms(self,sw):
         self.game.utilities.score(100)
-        self.game.sound.playsound(2)        
+        self.game.sound.playsound(2)
+        
+    def sw_cRStar_active_for_10ms(self,sw):
+        self.bame.utilities.score(100)
+        self.game.sound.playsound(2)
         
 
 #### outhole handler #####################################
