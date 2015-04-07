@@ -29,6 +29,9 @@ class DropTargetMode(game.Mode):
     bank3lights=[]
     bank3hold = False
     bank3Reset = False
+    threeBankDTLdown = False
+    threeBankDTCdown = False
+    ThreeBankDTRdown = False
     
     
     def __init__(self, game, priority):  
@@ -44,6 +47,12 @@ class DropTargetMode(game.Mode):
             self.bank5lights.append(self.game.lamps.fiveBank3Arrow)
             self.bank5lights.append(self.game.lamps.fiveBank4Arrow)
             self.bank5lights.append(self.game.lamps.fiveBank5Arrow)
+            
+            ## set up the light list for bank 3
+            
+            self.bank3lights.append(self.game.lamps.threeBankRArrow)
+            self.bank3lights.append(self.game.lamps.threeBankCArrow)
+            self.bank3lights.append(self.game.lamps.threeBankLArrow)
     
     def mode_started(self):
         logging.info("Drop Target mode started")
@@ -63,10 +72,16 @@ class DropTargetMode(game.Mode):
         self.bank5Reset = True 
         self.log.info("bank 5 reset called")
         ## then fire the reset coils, and add a delay so the switches don't get called
-        self.delay('5bankresetdelay', delay = .5 , handler = self.bank5resetdelay)
-        self.game.coils.bank5reset1to3.future_pulse(50,45)
-        self.game.coils.bank5reset4to5.future_pulse(50,80)        
-        
+        self.delay('5bankresetdelay', delay = .75 , handler = self.bank5resetdelay)
+        self.game.coils.bank5reset1to3.pulse(50)
+        self.game.coils.bank5reset4to5.future_pulse(50,70)        
+    
+    def bank3DTreset(self):
+        self.bank3Reset = True
+        self.log.info("bank 3 reset called")
+        self.delay('3bankresetdelay', delay = .75, handler = self.bank3ResetDelay)
+        ### im trying to stagger the pulses to the reset coils, so the don't go off all at once
+        self.game.coils.bank3reset.future_pulse(50, 80)
         
     def bank5resetdelay(self):
         ### turn off the reset flag so the DTs will score when they go down
@@ -77,6 +92,12 @@ class DropTargetMode(game.Mode):
         self.fiveBankDT4down = False
         self.fiveBankDT5down = False
         self.bank5Reset = False
+        
+    def bank3ResetDelay(self):
+        self.threeBankDTLdown = False
+        self.threeBankDTCdown = False
+        self.threeBankDTRdown = False
+        self.bank3Reset = False
         
         
     def bank5blink(self):
