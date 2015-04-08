@@ -59,13 +59,13 @@ class DropTargetMode(game.Mode):
         #self.dropTargetsReset()
         
     def dropTargetsReset(self):
-        #self.game.coils.bank3reset.pulse(50)
+        self.bank3DTreset()
         self.bank5DTreset()
         self.bank5index = 0
         self.cancel_delayed('5bankdelay')
         self.updateEjectHoleLights()
         self.bank5blink()
-        #self.bank3blink()
+        self.bank3blink()
         
     def bank5DTreset(self):
         ## to keep from scoring going up, we need to change the reset flag
@@ -74,14 +74,14 @@ class DropTargetMode(game.Mode):
         ## then fire the reset coils, and add a delay so the switches don't get called
         self.delay('5bankresetdelay', delay = .75 , handler = self.bank5resetdelay)
         self.game.coils.bank5reset1to3.pulse(50)
-        self.game.coils.bank5reset4to5.future_pulse(50,70)        
+        self.game.coils.bank5reset4to5.future_pulse(50,30)        
     
     def bank3DTreset(self):
         self.bank3Reset = True
         self.log.info("bank 3 reset called")
-        self.delay('3bankresetdelay', delay = .75, handler = self.bank3ResetDelay)
+        self.delay('3bankresetdelay', delay = .90, handler = self.bank3ResetDelay)
         ### im trying to stagger the pulses to the reset coils, so the don't go off all at once
-        self.game.coils.bank3reset.future_pulse(50, 80)
+        self.game.coils.bank3reset.future_pulse(60, 80)
         
     def bank5resetdelay(self):
         ### turn off the reset flag so the DTs will score when they go down
@@ -146,6 +146,54 @@ class DropTargetMode(game.Mode):
                 self.delay('5bankdelay', delay = 1, handler = self.bank5blink)        
         else:
             pass
+        
+    def bank3blink(self):
+        ###First check if we are in hold mode
+        if self.bank3hold == False:
+            ### first thing to do is turn off the old lights
+            for lamps in self.bank3lights:
+                    lamps.disable()        
+            
+                ### then turn on the next lamp, based on the index value
+            if self.bank3index <= 1:
+                self.bank3index = self.bank3index +1
+                self.bank3lights[self.bank3index].enable()
+                ## call to the delay for next lamp
+                self.delay('3bankdelay', delay = 1, handler = self.bank3blinkdelay)
+            else:
+                ### gets called if index is greater than 2
+                ### reset the index back to 0, then enable the light
+                self.bank3index = 0
+                self.bank3lights[self.bank3index].enable()
+                ## call to the delay for next lamp
+                self.delay('3bankdelay', delay = 1, handler = self.bank3blinkdelay)
+        else:
+            pass
+        
+    def bank3blinkdelay(self):
+        if self.bank5hold == False:
+            ### this method is basically a copy of bank3blink
+            ### both methods are used in sequense to create
+            ### a moving target effect
+            ### first thing to do is turn off the old lights
+            for lamps in self.bank3lights:
+                lamps.disable()
+                ### then turn on the next lamp, based on the index value
+            if self.bank3index <= 1:
+                self.bank3index = self.bank3index +1
+                self.bank3lights[self.bank3index].enable()
+                ## call to the delay for next lamp
+                self.delay('3bankdelay', delay = 1, handler = self.bank3blink)
+            else:
+                ### gets called if index is greater than 4
+                ### reset the index back to 0
+                self.bank3index = 0
+                self.bank3lights[self.bank3index].enable()
+                ## call to the delay for next lamp
+                self.delay('3bankdelay', delay = 1, handler = self.bank3blink)        
+        else:
+            pass        
+
     
     def bank5scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
@@ -220,6 +268,94 @@ class DropTargetMode(game.Mode):
             elif eject_hole_made == 2:
                 self.game.lamps.extraBallEjectHole.enable()
         
+    def bank3scorecheck(self, index):
+        self.game.utilities.set_player_stats('bonus', 1000, 'add')
+        self.game.bonus.update_bonus_lights_basic()
+        if self.bank3index == index:
+            ###pause the target lights
+            ### and cancel the delay chain
+            self.bank3hold == True
+            self.cancel_delayed('3bankdelay')
+            ### do a short blink ###
+            self.bank3lights[self.bank3index].schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
+            self.game.utilities.score(5000)
+            #### pause for 1.5 seconds before restarting the target lights
+            self.delay('bank3hold', delay = 1.5, handler =self.bank3resume)
+        else:
+            self.game.utilities.score(1000)  
+            
+    def bank3resume(self):
+        self.bank3hold = False
+        ### after this pause, it resumes the target lights
+        self.bank3blink()
+        
+    def bank3AllDown(self):
+        ### load award status
+        thunder = self.game.utilities.get_player_stats('thunder')
+        lightning = self.game.utilities.get_player_stats('lightning')
+        tempest = self.game.utilities.get_player_stats('tempest')
+        super_flash = self.game.utilities.get_player_stats('super_flash')
+        
+        if thunder == False:
+            self.game.utilities.score(5000)
+            self.game.sound.playsound(5)
+            self.game.utilities.set_player_stats('thunder', True, 'set')
+            self.reset3BankScoreLights()
+            
+        elif lightning == False:
+            self.game.utilities.score(10000)
+            self.game.sound.playsound(5)
+            self.game.utilities.set_player_stats('lightning', True, 'set')
+            self.reset3BankScoreLights()
+            
+        elif tempest == False:
+            self.game.utilities.score(20000)
+            self.game.sound.playsound(5)
+            self.game.utilities.set_player_stats('tempest', True, 'set')
+            self.reset3BankScoreLights()
+            
+        elif super_flash == False:
+            self.game.utilities.score(50000)
+            self.game.sound.playsound(5)
+            self.game.utilities.set_player_stats('super_flash', True, 'set')
+            self.reset3BankScoreLights()
+            self.delay('super_flash_reset', delay = 2, handler = self.super_flash_reset)
+        else:
+            pass
+        
+        ## reset the drop targets
+        self.bank3DTreset()
+
+    def super_flash_reset(self):
+        self.game.utilities.set_player_stats('thunder', False, 'set')
+        self.game.utilities.set_player_stats('lightning', False, 'set')
+        self.game.utilities.set_player_stats('tempest', False, 'set')
+        self.game.utilities.set_player_stats('super_flash', False, 'set')
+        self.reset3BankScoreLights()
+    
+    def reset3BankScoreLights(self):
+        ### load award status
+        thunder = self.game.utilities.get_player_stats('thunder')
+        lightning = self.game.utilities.get_player_stats('lightning')
+        tempest = self.game.utilities.get_player_stats('tempest')
+        super_flash = self.game.utilities.get_player_stats('super_flash')
+        
+        self.game.lamps.thunder.disable()
+        self.game.lamps.lightning.disable()
+        self.game.lamps.tempest.disable()
+        self.game.lamps.superFLASH.disable()
+        
+        if thunder == True:
+            self.game.lamps.thunder.enable()
+        
+        if lightning == True:
+            self.game.lamps.lightning.enable()
+            
+        if tempest == True:
+            self.game.lamps.tempest.enable()
+        
+        if super_flash == True:
+            self.game.lamps.superFLASH.enable()
         
 ########################################
 ####  drop target switch handlers ######
@@ -256,12 +392,36 @@ class DropTargetMode(game.Mode):
     def sw_fiveBankDT5_closed_for_10ms(self,sw):
         if self.bank5Reset == False:
             self.fiveBankDT5down = True
+            self.log.info("five bank DT 5 dropped")
             self.bank5scorecheck(4)
         
     def sw_all5BankDown_active(self, sw):
         if self.bank5Reset == False:
-            self.log.info("five bank DT 5 dropped")
+            self.log.info("five bank all down")
             self.bank5AllDown()
+            
+    def sw_rDropTarget3B_closed_for_10ms(self, sw):
+        if self.bank3Reset == False:
+            self.threeBankDTLdown = True
+            self.log.info("three bank DT Left dropped")
+            self.bank3scorecheck(0)
+            
+    def sw_cDropTarget3B_closed_for_10ms(self, sw):
+        if self.bank3Reset == False:
+            self.threeBankDTLdown = True
+            self.log.info("three bank DT center dropped")
+            self.bank3scorecheck(1)
+            
+    def sw_lDropTarget3B_closed_for_10ms(self, sw):
+        if self.bank3Reset == False:
+            self.threeBankDTLdown = True
+            self.log.info("three bank DT Right dropped")
+            self.bank3scorecheck(2)
+            
+    def sw_all3BankDown_closed_for_10ms(self,sw):
+        if self.bank3Reset == False:
+            self.log.info("three bank all down")
+            self.bank3AllDown()
 
             
     def sw_ejectHole_active_for_100ms(self, sw):
