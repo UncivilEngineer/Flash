@@ -83,6 +83,7 @@ class BaseGameMode(game.Mode):
         self.game.droptarget_mode.dropTargetsReset()
         self.game.jetbumper_mode.jetReset()
         self.game.droptarget_mode.updateEjectHoleLights()
+        self.game.droptarget_mode.reset3BankScoreLights()
         self.game.bonus.update_bonus_lights_basic()
 
         ###after a delay, kick out ball
@@ -139,7 +140,7 @@ class BaseGameMode(game.Mode):
             self.log.info('not last player drained, going to next player')
             ### move to next player
             self.game.current_player_index += 1
-            self.start_ball
+            self.start_ball()
 
     def end_game(self):
         self.log.info('game ended')

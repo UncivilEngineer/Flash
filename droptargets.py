@@ -32,6 +32,7 @@ class DropTargetMode(game.Mode):
     threeBankDTLdown = False
     threeBankDTCdown = False
     ThreeBankDTRdown = False
+    specialEnable = False
     
     
     def __init__(self, game, priority):  
@@ -66,6 +67,7 @@ class DropTargetMode(game.Mode):
         self.updateEjectHoleLights()
         self.bank5blink()
         self.bank3blink()
+        self.specialEnable = False
         
     def bank5DTreset(self):
         ## to keep from scoring going up, we need to change the reset flag
@@ -229,8 +231,9 @@ class DropTargetMode(game.Mode):
         #### 1 = 5000 score
         #### 2 = 10000 score
         #### 3 = light extra ball
+        #### 4 = lights special
         #### actual light values are set when you hit the hole
-        if ejectvalue < 3:
+        if ejectvalue < 5:
             self.game.utilities.set_player_stats('eject_hole', 1, 'add')
         else:
             self.game.utilities.set_player_stats('eject_hole', 0, 'set')
@@ -243,6 +246,8 @@ class DropTargetMode(game.Mode):
         self.game.lamps.ejectHole5000.disable()
         self.game.lamps.ejectHole10000.disable()
         self.game.lamps.extraBallEjectHole.disable()
+        self.game.lamps.leftSpecial.disable()
+        self.game.lamps.rightSpecial.disable()
         
         ### set lamps based on eject_hole, or eject_hole made
         eject_hole = self.game.utilities.get_player_stats('eject_hole')
@@ -250,13 +255,15 @@ class DropTargetMode(game.Mode):
         
         ## if they are equal, then we don't have any catch up to do on the eject hole
         if eject_hole_made == eject_hole:
-        
             if eject_hole == 1:
                 self.game.lamps.ejectHole5000.enable()
             elif eject_hole == 2:
                 self.game.lamps.ejectHole10000.enable()
             elif eject_hole == 3:
                 self.game.lamps.extraBallEjectHole.enable()
+            elif eject_hole == 4:
+                self.game.lamps.leftSpecial.enable()
+                self.game.lamps.rightSpecial.enable()
         
         ## if eject hole made is less, then we have cycled down the drop targets more than we have
         ## made the eject hole.
@@ -267,6 +274,9 @@ class DropTargetMode(game.Mode):
                 self.game.lamps.ejectHole10000.enable()
             elif eject_hole_made == 2:
                 self.game.lamps.extraBallEjectHole.enable()
+            elif eject_hole_made == 3:
+                self.game.lamps.leftSpecial.enable()
+                self.game.lamps.rightSpecial.enable()
         
     def bank3scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
@@ -278,13 +288,14 @@ class DropTargetMode(game.Mode):
             self.cancel_delayed('3bankdelay')
             ### do a short blink ###
             self.bank3lights[self.bank3index].schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
-            self.game.utilities.score(5000)
+            self.game.utilities.score(3000)
             #### pause for 1.5 seconds before restarting the target lights
             self.delay('bank3hold', delay = 1.5, handler =self.bank3resume)
         else:
             self.game.utilities.score(1000)  
             
     def bank3resume(self):
+        self.cancel_delayed('3bankdelay')
         self.bank3hold = False
         ### after this pause, it resumes the target lights
         self.bank3blink()
@@ -298,25 +309,25 @@ class DropTargetMode(game.Mode):
         
         if thunder == False:
             self.game.utilities.score(5000)
-            self.game.sound.playsound(5)
+            self.game.sound.playsound(6)
             self.game.utilities.set_player_stats('thunder', True, 'set')
             self.reset3BankScoreLights()
             
         elif lightning == False:
             self.game.utilities.score(10000)
-            self.game.sound.playsound(5)
+            self.game.sound.playsound(6)
             self.game.utilities.set_player_stats('lightning', True, 'set')
             self.reset3BankScoreLights()
             
         elif tempest == False:
             self.game.utilities.score(20000)
-            self.game.sound.playsound(5)
+            self.game.sound.playsound(6)
             self.game.utilities.set_player_stats('tempest', True, 'set')
             self.reset3BankScoreLights()
             
         elif super_flash == False:
             self.game.utilities.score(50000)
-            self.game.sound.playsound(5)
+            self.game.sound.playsound(6)
             self.game.utilities.set_player_stats('super_flash', True, 'set')
             self.reset3BankScoreLights()
             self.delay('super_flash_reset', delay = 2, handler = self.super_flash_reset)
@@ -344,15 +355,21 @@ class DropTargetMode(game.Mode):
         self.game.lamps.lightning.disable()
         self.game.lamps.tempest.disable()
         self.game.lamps.superFLASH.disable()
+       
+        if thunder == False:
+            self.game.lamps.thunder.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
         
         if thunder == True:
             self.game.lamps.thunder.enable()
+            self.game.lamps.lightning.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
         
         if lightning == True:
             self.game.lamps.lightning.enable()
+            self.game.lamps.tempest.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
             
         if tempest == True:
             self.game.lamps.tempest.enable()
+            self.game.lamps.superFLASH.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
         
         if super_flash == True:
             self.game.lamps.superFLASH.enable()
@@ -446,10 +463,43 @@ class DropTargetMode(game.Mode):
             self.game.lamps.shootAgainP.enable()
             ## now reset eject hole values
             self.game.utilities.set_player_stats('eject_hole', 1, 'set')
-            self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+            #self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+        if eject_hole_made == 4:
+            self.updateEjectHoleLights()
+            self.specialEnable = True
 
         self.delay('ejectHoleDelay', delay = 1.5, handler = self.doEjectHole)
         
     def doEjectHole(self):
         self.updateEjectHoleLights()
         self.game.coils.ejectHole.pulse(30)
+    
+    def sw_rightSpecial_closed_for_10ms(self, sw):
+        ## get eject hole made value to check if the value is 4
+        
+        
+        if self.specialEnable == True:
+            self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
+            self.game.lamps.shootAgainP.enable()
+            self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+            self.game.lamps.rightSpecial.disable()
+            self.game.lamps.leftSpecial.disable()
+            self.specialEnable = False
+        else:
+            self.game.utilities.score(2000)
+            self.game.utilities.set_player_stats('bonus', 2000, 'add')
+            self.game.sound.playsound(4)
+            
+    def sw_leftSpecial_closed_for_10ms(self, sw):
+        
+        if self.specialEnable == True:
+            self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
+            self.game.lamps.shootAgainP.enable()
+            self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+            self.game.lamps.rightSpecial.disable()
+            self.game.lamps.leftSpecial.disable()
+            self.special.Enable = False
+        else:
+            self.game.utilities.score(2000)
+            self.game.utilities.set_player_stats('bonus', 2000, 'add')
+            self.game.sound.playsound(4)
