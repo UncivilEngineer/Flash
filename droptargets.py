@@ -19,6 +19,7 @@ class DropTargetMode(game.Mode):
     bank5lights = []
     bank5hold = False
     bank5Reset = True
+    bank5Made = 0
     fiveBankDT1down = False
     fiveBankDT2down = False
     fiveBankDT3down = False
@@ -64,6 +65,7 @@ class DropTargetMode(game.Mode):
         self.bank5DTreset()
         self.bank5index = 0
         self.cancel_delayed('5bankdelay')
+        self.cancel_delayed('3bankdelay')
         self.updateEjectHoleLights()
         self.bank5blink()
         self.bank3blink()
@@ -233,13 +235,16 @@ class DropTargetMode(game.Mode):
         #### 3 = light extra ball
         #### 4 = lights special
         #### actual light values are set when you hit the hole
-        if ejectvalue < 5:
-            self.game.utilities.set_player_stats('eject_hole', 1, 'add')
-        else:
-            self.game.utilities.set_player_stats('eject_hole', 0, 'set')
-        
+        self.bank5Made = self.bank5Made + 1
+        if self.bank5Made >= 1:
+            self.rollOverArrowCheck()
+            
         self.updateEjectHoleLights()
         self.bank5DTreset()
+    
+    def rollOverArrowCheck(self):
+        ## some coding needs to happen here...
+        pass
     
     def updateEjectHoleLights(self):
         #### shut down all eject hole lights
@@ -249,34 +254,25 @@ class DropTargetMode(game.Mode):
         self.game.lamps.leftSpecial.disable()
         self.game.lamps.rightSpecial.disable()
         
-        ### set lamps based on eject_hole, or eject_hole made
-        eject_hole = self.game.utilities.get_player_stats('eject_hole')
-        eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
+        # Im not sure we are going to use this any more
+        #eject_hole = self.game.utilities.get_player_stats('eject_hole')
+        #eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
         
-        ## if they are equal, then we don't have any catch up to do on the eject hole
-        if eject_hole_made == eject_hole:
-            if eject_hole == 1:
-                self.game.lamps.ejectHole5000.enable()
-            elif eject_hole == 2:
-                self.game.lamps.ejectHole10000.enable()
-            elif eject_hole == 3:
-                self.game.lamps.extraBallEjectHole.enable()
-            elif eject_hole == 4:
-                self.game.lamps.leftSpecial.enable()
-                self.game.lamps.rightSpecial.enable()
-        
-        ## if eject hole made is less, then we have cycled down the drop targets more than we have
-        ## made the eject hole.
-        elif eject_hole_made < eject_hole:
-            if eject_hole_made == 0: ## no hits on eject hole
-                self.game.lamps.ejectHole5000.enable()
-            elif eject_hole_made == 1:
-                self.game.lamps.ejectHole10000.enable()
-            elif eject_hole_made == 2:
-                self.game.lamps.extraBallEjectHole.enable()
-            elif eject_hole_made == 3:
-                self.game.lamps.leftSpecial.enable()
-                self.game.lamps.rightSpecial.enable()
+        if self.bank5Made == 0:
+            self.game.lamps.ejectHole5000.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
+        elif self.bank5Made == 1:
+            self.game.lamps.ejectHole5000.enable()
+            self.game.lamps.ejectHole10000.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
+        elif self.bank5Made == 2:
+            self.game.lamps.ejectHole5000.enable()
+            self.game.lamps.ejectHole10000.enable()
+            self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
+        elif self.bank5Made == 3:
+            self.specialEnable = True
+            self.game.lamps.rightSpecial.enable()
+            self.game.lamps.leftSpecial.enable() 
+            self.bank5Made = 0
+       
         
     def bank3scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
@@ -442,31 +438,24 @@ class DropTargetMode(game.Mode):
 
             
     def sw_ejectHole_active_for_100ms(self, sw):
-        eject_hole = self.game.utilities.get_player_stats('eject_hole')
-        eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
+        #eject_hole = self.game.utilities.get_player_stats('eject_hole')
+        #eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
         
-           ### first see if we need to increment made both locally, and in player stats
-        if eject_hole_made < eject_hole:
-            eject_hole_made = eject_hole_made + 1
-            self.game.utilities.set_player_stats('eject_hole_made', 1, 'add')
-        
-        ## now evaluate made
-        if eject_hole_made == 1:
+         
+        ## check the scoreing
+        if self.bank5Made == 0:
             self.game.utilities.score(5000)
             self.game.lamps.ejectHole5000.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
-        if eject_hole_made == 2:
+        elif self.bank5Made == 1:
             self.game.utilities.score(10000)
             self.game.lamps.ejectHole10000.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
-        if eject_hole_made == 3:
+        elif self.bank5Made == 2:
             self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
             self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
             self.game.lamps.shootAgainP.enable()
             ## now reset eject hole values
-            self.game.utilities.set_player_stats('eject_hole', 1, 'set')
-            #self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
-        if eject_hole_made == 4:
+        elif self.bank5Made == 3:
             self.updateEjectHoleLights()
-            self.specialEnable = True
 
         self.delay('ejectHoleDelay', delay = 1.5, handler = self.doEjectHole)
         
@@ -481,7 +470,7 @@ class DropTargetMode(game.Mode):
         if self.specialEnable == True:
             self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
             self.game.lamps.shootAgainP.enable()
-            self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
+            #self.game.utilities.set_player_stats('eject_hole_made', 0, 'set')
             self.game.lamps.rightSpecial.disable()
             self.game.lamps.leftSpecial.disable()
             self.specialEnable = False
