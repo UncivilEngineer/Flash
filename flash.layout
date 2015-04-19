@@ -1,0 +1,911 @@
+bg_image: playfield.jpg
+button_locations:
+- leftKicker:
+    x: 85
+    y: 696
+- hiScoreReset:
+    x: 27
+    y: 879
+- leftSpecial:
+    x: 22
+    y: 711
+- playfieldTilt:
+    x: 56
+    y: 854
+- lowerJetBumper:
+    x: 253
+    y: 316
+- rollTilt:
+    x: 55
+    y: 905
+- leftFRLane:
+    x: 46
+    y: 696
+- s81:
+    x: 7
+    y: 32
+- s82:
+    x: 29
+    y: 35
+- s83:
+    x: 58
+    y: 36
+- innerULStar:
+    x: 59
+    y: 164
+- s85:
+    x: 275
+    y: -2
+- s86:
+    x: 299
+    y: 1
+- s87:
+    x: 329
+    y: 3
+- s88:
+    x: 362
+    y: 7
+- rsStandupLower:
+    x: 363
+    y: 378
+- autoUp:
+    x: 97
+    y: 881
+- rightKicker:
+    x: 323
+    y: 683
+- rSStandup:
+    x: 396
+    y: 284
+- s78:
+    x: 242
+    y: 1
+- centerCoin:
+    x: 132
+    y: 905
+- outerULStar:
+    x: 10
+    y: 167
+- spinner:
+    x: 402
+    y: 153
+- cRStar:
+    x: 361
+    y: 301
+- cDropTarget3B:
+    x: 228
+    y: 362
+- outHole:
+    x: 214
+    y: 870
+- s71:
+    x: 5
+    y: 13
+- fiveBankDT1:
+    x: 64
+    y: 351
+- s73:
+    x: 70
+    y: 8
+- s72:
+    x: 33
+    y: 12
+- s75:
+    x: 136
+    y: 5
+- s74:
+    x: 107
+    y: 9
+- all3BankDown:
+    x: 230
+    y: 392
+- s76:
+    x: 178
+    y: -2
+- rollover1:
+    x: 155
+    y: 127
+- rollover2:
+    x: 209
+    y: 121
+- rightFRLane:
+    x: 361
+    y: 690
+- rollover4:
+    x: 309
+    y: 95
+- leftTarget:
+    x: 15
+    y: 529
+- rightJetBumper:
+    x: 291
+    y: 218
+- all5BankUp:
+    x: 21
+    y: 404
+- all5BankDown:
+    x: 86
+    y: 427
+- rollover3:
+    x: 256
+    y: 106
+- rightSpecial:
+    x: 393
+    y: 706
+- rightCoin:
+    x: 100
+    y: 906
+- slamTilt:
+    x: 211
+    y: 907
+- rightTarget:
+    x: 391
+    y: 519
+- memoryLock:
+    x: 56
+    y: 881
+- leftCoin:
+    x: 162
+    y: 905
+- advance:
+    x: 133
+    y: 884
+- leftJetBumper:
+    x: 183
+    y: 245
+- lRStar:
+    x: 344
+    y: 340
+- upperLstandup:
+    x: 130
+    y: 165
+- fiveBankDT5:
+    x: 41
+    y: 462
+- fiveBankDT4:
+    x: 50
+    y: 437
+- startButton:
+    x: 13
+    y: 839
+- ejectHole:
+    x: 428
+    y: 304
+- s77:
+    x: 211
+    y: 2
+- fiveBankDT3:
+    x: 57
+    y: 409
+- fiveBankDT2:
+    x: 61
+    y: 381
+- rDropTarget3B:
+    x: 260
+    y: 366
+- s84:
+    x: 80
+    y: 39
+- rsStandupCen:
+    x: 384
+    y: 329
+- topRstandup:
+    x: 343
+    y: 117
+- plumbTilt:
+    x: 30
+    y: 902
+- lDropTarget3B:
+    x: 196
+    y: 347
+- uRStar:
+    x: 375
+    y: 248
+lamp_locations:
+- canPlay4:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- centerRightAndLowerStars:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 350
+    y: 324
+- canPlay1:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- canPlay2:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- canPlay3:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- extraBallEjectHole:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 409
+    y: 409
+- bonus1000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 248
+    y: 656
+- bonus20000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 220
+    y: 666
+- threeBankRArrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 265
+    y: 444
+- bonus9000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 180
+    y: 654
+- left3BonusAdv:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 62
+    y: 642
+- fiveBank2Arrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 108
+    y: 483
+- ballInPlay:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- l11:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- bonus8000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 163
+    y: 683
+- tempest:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 241
+    y: 610
+- Match:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- bonus3000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 271
+    y: 716
+- lowerJetBumper:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 267
+    y: 301
+- upperLeftArrows:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 41
+    y: 260
+- threeBankCArrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 241
+    y: 437
+- shootAgainP:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 219
+    y: 844
+- ejectHole10000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 387
+    y: 450
+- bonus7000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 165
+    y: 716
+- l71:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- fiveBank3Arrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 107
+    y: 516
+- bonus2000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 267
+    y: 683
+- Credits:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- samePlayerShootAgain:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- leftSpecial:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 33
+    y: 673
+- fiveBank4Arrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 106
+    y: 551
+- highScore:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- bonus10000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 214
+    y: 646
+- l66:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- Player4Up:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- fiveBank1Arrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 113
+    y: 454
+- leftJetBumper:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 198
+    y: 234
+- rightJetBumper:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 298
+    y: 206
+- l68:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- player1Up:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- rightSpecial:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 405
+    y: 672
+- bonus4000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 251
+    y: 745
+- bonus6000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 182
+    y: 744
+- l67:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- x2:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 153
+    y: 759
+- x3:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 284
+    y: 756
+- right3BonusAdv:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 373
+    y: 636
+- bonus5000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 218
+    y: 756
+- rollOver1:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 169
+    y: 98
+- rollOver2:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 217
+    y: 86
+- rollOver3:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 265
+    y: 72
+- rollOver4:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 321
+    y: 58
+- player2Up:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- spinnerAndRollover:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 395
+    y: 210
+- ejectHole5000:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 373
+    y: 482
+- l23:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- threeBankLArrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 214
+    y: 428
+- lightning:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 214
+    y: 605
+- fiveBank5Arrow:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 98
+    y: 585
+- tilt:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- gameOver:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- superFLASH:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 216
+    y: 701
+- Player3Up:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 0
+    y: 0
+- thunder:
+    color_off:
+      b: 0
+      g: 0
+      r: 0
+    color_on:
+      b: 255
+      g: 255
+      r: 0
+    x: 189
+    y: 607
+window_size:
+  height: 930
+  width: 474

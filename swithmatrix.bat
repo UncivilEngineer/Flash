@@ -1,0 +1,1 @@
+python switchMatrixClient.py -y Flash.yaml -l flash.layout -i flash.jpg

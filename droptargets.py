@@ -63,13 +63,24 @@ class DropTargetMode(game.Mode):
     def dropTargetsReset(self):
         self.bank3DTreset()
         self.bank5DTreset()
+        self.bank5Made = 0
         self.bank5index = 0
+        self.bank5hold = False
         self.cancel_delayed('5bankdelay')
         self.cancel_delayed('3bankdelay')
         self.updateEjectHoleLights()
         self.bank5blink()
         self.bank3blink()
+        
+        #reset special lights
+        self.game.lamps.rightSpecial.disable()
+        self.game.lamps.leftSpecial.disable()
         self.specialEnable = False
+        
+        #reset upper arrows
+        self.game.lamps.upperLeftArrows.disable()
+        self.game.lamps.spinnerAndRollover.disable()
+        self.game.lamps.centerRightAndLowerStars.disable()        
         
     def bank5DTreset(self):
         ## to keep from scoring going up, we need to change the reset flag
@@ -202,18 +213,24 @@ class DropTargetMode(game.Mode):
     def bank5scorecheck(self, index):
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
         self.game.bonus.update_bonus_lights_basic()
-        if self.bank5index == index:
-            ###pause the target lights
-            ### and cancel the delay chain
-            self.bank5hold == True
-            self.cancel_delayed('5bankdelay')
-            ### do a short blink ###
-            self.bank5lights[self.bank5index].schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
-            self.game.utilities.score(5000)
-            #### pause for 1.5 seconds before restarting the target lights
-            self.delay('bank5hold', delay = 1.5, handler =self.bank5resume)
+        #check to see if we are in hold, happens after 4 drops
+        if self.bank5hold == False:
+            if self.bank5index == index:
+                ###pause the target lights
+                ### and cancel the delay chain
+                self.bank5hold == True
+                self.cancel_delayed('5bankdelay')
+                ### do a short blink ###
+                self.bank5lights[self.bank5index].schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
+                self.game.utilities.score(5000)
+                #### pause for 1.5 seconds before restarting the target lights
+                self.delay('bank5hold', delay = 1.5, handler =self.bank5resume)
+            else:
+                self.game.utilities.score(1000)
         else:
-            self.game.utilities.score(1000)
+            # if bank5Hold is enabled, socre 5000
+            self.game.utilities.score(5000)
+            
         
         ### the All Bank Down switch are notoriously for not closing when the bank is down, so I added a second check here
         if self.fiveBankDT1down == True and self.fiveBankDT2down == True and self.fiveBankDT3down == True and self.fiveBankDT4down == True and self.fiveBankDT5down == True:
@@ -227,14 +244,6 @@ class DropTargetMode(game.Mode):
         self.bank5blink()
 
     def bank5AllDown(self):
-        ### This is called from either the all bank 5 down switch, or by the flag check if a target goes down.
-        ejectvalue = self.game.utilities.get_player_stats('eject_hole')
-        #### eject_hole values
-        #### 1 = 5000 score
-        #### 2 = 10000 score
-        #### 3 = light extra ball
-        #### 4 = lights special
-        #### actual light values are set when you hit the hole
         self.bank5Made = self.bank5Made + 1
         if self.bank5Made >= 1:
             self.rollOverArrowCheck()
@@ -243,8 +252,10 @@ class DropTargetMode(game.Mode):
         self.bank5DTreset()
     
     def rollOverArrowCheck(self):
-        ## some coding needs to happen here...
-        pass
+        ## used to light up roll over star lamps
+        self.game.lamps.upperLeftArrows.enable()
+        self.game.lamps.spinnerAndRollover.enable()
+        self.game.lamps.centerRightAndLowerStars.enable()
     
     def updateEjectHoleLights(self):
         #### shut down all eject hole lights
@@ -259,19 +270,24 @@ class DropTargetMode(game.Mode):
         #eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
         
         if self.bank5Made == 0:
-            self.game.lamps.ejectHole5000.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
+            self.game.lamps.ejectHole5000.enable()
         elif self.bank5Made == 1:
-            self.game.lamps.ejectHole5000.enable()
-            self.game.lamps.ejectHole10000.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = False)
-        elif self.bank5Made == 2:
-            self.game.lamps.ejectHole5000.enable()
+            self.game.lamps.ejectHole5000.disable()
             self.game.lamps.ejectHole10000.enable()
-            self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
+        elif self.bank5Made == 2:
+            self.game.lamps.ejectHole10000.disable()
+            self.game.lamps.extraBallEjectHole.enable()
         elif self.bank5Made == 3:
             self.specialEnable = True
             self.game.lamps.rightSpecial.enable()
             self.game.lamps.leftSpecial.enable() 
-            self.bank5Made = 0
+        elif self.bank5Made == 4:
+            self.game.lamps.fiveBank1Arrow.enable()
+            self.game.lamps.fiveBank2Arrow.enable()
+            self.game.lamps.fiveBank3Arrow.enable()
+            self.game.lamps.fiveBank4Arrow.enable()
+            self.game.lamps.fiveBank5Arrow.enable()
+            self.bank5hold = True 
        
         
     def bank3scorecheck(self, index):
@@ -438,9 +454,6 @@ class DropTargetMode(game.Mode):
 
             
     def sw_ejectHole_active_for_100ms(self, sw):
-        #eject_hole = self.game.utilities.get_player_stats('eject_hole')
-        #eject_hole_made = self.game.utilities.get_player_stats('eject_hole_made')
-        
          
         ## check the scoreing
         if self.bank5Made == 0:
@@ -450,12 +463,16 @@ class DropTargetMode(game.Mode):
             self.game.utilities.score(10000)
             self.game.lamps.ejectHole10000.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
         elif self.bank5Made == 2:
-            self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
-            self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
-            self.game.lamps.shootAgainP.enable()
+            if self.game.utilities.get_player_stats('extra_balls') == 0:
+                self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
+                self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
+                self.game.lamps.shootAgainP.enable()
+            else:
+                ## extra ball has already been awarded
+                self.game.utilities.score(20000)
             ## now reset eject hole values
-        elif self.bank5Made == 3:
-            self.updateEjectHoleLights()
+        elif self.bank5Made > 2:
+            self.game.utilities.score(20000)
 
         self.delay('ejectHoleDelay', delay = 1.5, handler = self.doEjectHole)
         
@@ -492,3 +509,22 @@ class DropTargetMode(game.Mode):
             self.game.utilities.score(2000)
             self.game.utilities.set_player_stats('bonus', 2000, 'add')
             self.game.sound.playsound(4)
+    
+    def sw_outerULStar_closed_for_10ms(self, sw):
+        if self.bank5Made >= 1:
+            self.game.utilities.score(3000)
+        else:
+            self.game.utilities.score(1000)
+    
+    def sw_innerULStar_closed_for_10ms(self, sw):
+        if self.bank5Made >=1:
+            self.game.utilities.score(3000)
+        else:
+            self.game.utilities.score(1000)
+    
+    def sw_spinner_active(self, sw):
+        if self.bank5Made >= 1:
+            self.game.utilities.score(1000)
+        else:
+            self.game.utilities.score(100)
+        

@@ -92,6 +92,7 @@ class BaseGameMode(game.Mode):
         ###Change ball in play status from player####
         self.game.utilities.set_player_stats('ball_in_play',True)
         self.log.info('ball started: ' +str(self.game.ball))
+        self.game.sound.playsound(17)
         
         
     def kickBallOut(self):
@@ -105,6 +106,7 @@ class BaseGameMode(game.Mode):
         self.game.utilities.set_player_stats('ball_in_play',False)
 
         self.game.bonus.award_bonus()
+        self.game.sound.playsound(19)
     ### in order to make sure the bonus gets added in before we start a new ball
     ### it was necessary to split this function up.  award_bonus calls endBallCont()
     
@@ -198,7 +200,7 @@ class BaseGameMode(game.Mode):
         self.game.sound.playsound(2)
         
     def sw_cRStar_active_for_10ms(self,sw):
-        self.bame.utilities.score(100)
+        self.game.utilities.score(100)
         self.game.sound.playsound(2)
         
 
