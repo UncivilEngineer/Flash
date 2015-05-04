@@ -42,21 +42,22 @@ class BaseGameMode(game.Mode):
         elif self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
             if (len(self.game.players) == 2):
-                self.game.players[1].player_stats['display_name'] = 'P2'
+                #self.game.players[1].player_stats['display_name'] = 'P2'
                 ### this is where the Player two display would turn on
                 self.game.lamps.canPlay2.enable()
             elif(len(self.game.players) == 3):
-                self.game.players[2].player_stats['display_name'] = 'P3'
+                #self.game.players[2].player_stats['display_name'] = 'P3'
                 ### this is where player three display would turn on
                 self.game.lamps.canPlay3.enable()
             elif(len(self.game.players) == 4):
-                self.game.players[3].player_stats['display_name'] = 'P4'
+                #self.game.players[3].player_stats['display_name'] = 'P4'
                 ### this is where player four display would turn on
                 self.game.lamps.canPlay4.enable()
 
 
     def start_game(self):
         self.log.info('Start Game')
+        self.game.utilities.allDisplaysOn()
 
         ##### Remove attract mode  #####
         self.game.modes.remove(self.game.attract_mode)
@@ -64,7 +65,7 @@ class BaseGameMode(game.Mode):
         self.game.lampctrl.stop_show()
         ### adds player for player 1 game
         self.game.add_player()
-        self.game.utilities.set_player_stats('display_name', 'P1') 
+        #self.game.utilities.set_player_stats('display_name', 'P1', 'set') 
         
         self.game.balls_per_game = 3 ###This needs to get moved to an user setting file
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')

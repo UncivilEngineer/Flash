@@ -88,8 +88,8 @@ class DropTargetMode(game.Mode):
         self.log.info("bank 5 reset called")
         ## then fire the reset coils, and add a delay so the switches don't get called
         self.delay('5bankresetdelay', delay = .75 , handler = self.bank5resetdelay)
-        self.game.coils.bank5reset1to3.pulse(50)
-        self.game.coils.bank5reset4to5.future_pulse(50,30)        
+        self.game.coils.bank5reset1to3.pulse(60)
+        self.game.coils.bank5reset4to5.future_pulse(60,30)        
     
     def bank3DTreset(self):
         self.bank3Reset = True
@@ -523,6 +523,7 @@ class DropTargetMode(game.Mode):
             self.game.utilities.score(1000)
     
     def sw_spinner_active(self, sw):
+        self.game.sound.playsound(3)
         if self.bank5Made >= 1:
             self.game.utilities.score(1000)
         else:

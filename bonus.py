@@ -169,7 +169,8 @@ class BonusGameMode(game.Mode):
             if self.tempBonusValue >= 1000:
                 self.tempBonusValue = self.tempBonusValue - 1000
                 self.game.utilities.score(1000)
-                self.delay("bonus", delay = .05, handler = self.bonusloop)
+                self.game.sound.playsound(1)
+                self.delay("bonus", delay = .1, handler = self.bonusloop)
             elif self.tempBonusValue == 0:
                 self.log.info("inside tempbonus == 0")
                 self.game.utilities.set_player_stats('bonus_x', bonusMult - 1, 'set')
@@ -186,7 +187,7 @@ class BonusGameMode(game.Mode):
         self.log.info("bonusloop called")
         bonusX = self.game.utilities.get_player_stats('bonus_x')
         self.game.bonus.update_bonus_lights(self.tempBonusValue, bonusX)
-        self.delay("bonus", delay = .05, handler = self.doAwardBonus)
+        self.delay("bonus", delay = .1, handler = self.doAwardBonus)
         
             
 
