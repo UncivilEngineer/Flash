@@ -42,22 +42,27 @@ class BaseGameMode(game.Mode):
         elif self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
             if (len(self.game.players) == 2):
-                #self.game.players[1].player_stats['display_name'] = 'P2'
-                ### this is where the Player two display would turn on
+                self.game.utilities.updateDisplay('P2', 0)
                 self.game.lamps.canPlay2.enable()
             elif(len(self.game.players) == 3):
-                #self.game.players[2].player_stats['display_name'] = 'P3'
-                ### this is where player three display would turn on
+                self.game.utilities.updateDisplay('P3', 0)
                 self.game.lamps.canPlay3.enable()
             elif(len(self.game.players) == 4):
-                #self.game.players[3].player_stats['display_name'] = 'P4'
-                ### this is where player four display would turn on
+                self.game.utilities.updateDisplay('P4', 0)
                 self.game.lamps.canPlay4.enable()
 
 
     def start_game(self):
         self.log.info('Start Game')
+        
+        ### start up displays
         self.game.utilities.allDisplaysOn()
+        self.game.utilities.updateDisplay('P1', 0)
+        self.game.utilities.displayOff('P2')
+        self.game.utilities.displayOff('P3')
+        self.game.utilities.displayOff('P4')
+        
+        self.game.lamps.canPlay1.enable()
 
         ##### Remove attract mode  #####
         self.game.modes.remove(self.game.attract_mode)
@@ -65,7 +70,7 @@ class BaseGameMode(game.Mode):
         self.game.lampctrl.stop_show()
         ### adds player for player 1 game
         self.game.add_player()
-        #self.game.utilities.set_player_stats('display_name', 'P1', 'set') 
+        
         
         self.game.balls_per_game = 3 ###This needs to get moved to an user setting file
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')
@@ -76,7 +81,8 @@ class BaseGameMode(game.Mode):
         
         ####This should be where a ball save mode is added to the que
         #### for now it's empty 
-        #### ball display needs to be updated here
+        #### cycle ball display
+        self.game.utilities.updateDisplay('M1', self.game.ball)
         #### enable the flipper coils
         self.game.coils.flipperEnable.enable()
 
@@ -181,13 +187,15 @@ class BaseGameMode(game.Mode):
         game_data_path = curr_file_path + "\config\game_data.yaml"
         
         self.game.save_game_data(game_data_path)
-        
-    def reset():
-        self.game.ball = 0
-        self.game.old_players = []
-        self.game.old_players = self.game.players[:]
-        self.game.players = []
-        self.game.current_player_index = 0
+
+##### this section removed because it was duplicated in flash.py        
+#    def reset():
+#        self.game.ball = 0
+#        self.game.utilities.updateDisplay('M1', self.game.ball)
+#        self.game.old_players = []
+#        self.game.old_players = self.game.players[:]
+#        self.game.players = []
+#        self.game.current_player_index = 0
         
         
 #########################################################
