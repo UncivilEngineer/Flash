@@ -21,30 +21,15 @@ button_locations:
 - leftFRLane:
     x: 46
     y: 696
-- s81:
-    x: 7
-    y: 32
-- s82:
-    x: 29
-    y: 35
-- s83:
-    x: 58
-    y: 36
+- upperLstandup:
+    x: 130
+    y: 165
+- rollover3:
+    x: 256
+    y: 106
 - innerULStar:
     x: 59
     y: 164
-- s85:
-    x: 275
-    y: -2
-- s86:
-    x: 299
-    y: 1
-- s87:
-    x: 329
-    y: 3
-- s88:
-    x: 362
-    y: 7
 - rsStandupLower:
     x: 363
     y: 378
@@ -54,12 +39,6 @@ button_locations:
 - rightKicker:
     x: 323
     y: 683
-- rSStandup:
-    x: 396
-    y: 284
-- s78:
-    x: 242
-    y: 1
 - centerCoin:
     x: 132
     y: 905
@@ -75,33 +54,12 @@ button_locations:
 - cDropTarget3B:
     x: 228
     y: 362
-- outHole:
-    x: 214
-    y: 870
-- s71:
-    x: 5
-    y: 13
 - fiveBankDT1:
     x: 64
     y: 351
-- s73:
-    x: 70
-    y: 8
-- s72:
-    x: 33
-    y: 12
-- s75:
-    x: 136
-    y: 5
-- s74:
-    x: 107
-    y: 9
 - all3BankDown:
     x: 230
     y: 392
-- s76:
-    x: 178
-    y: -2
 - rollover1:
     x: 155
     y: 127
@@ -126,9 +84,6 @@ button_locations:
 - all5BankDown:
     x: 86
     y: 427
-- rollover3:
-    x: 256
-    y: 106
 - rightSpecial:
     x: 393
     y: 706
@@ -156,9 +111,9 @@ button_locations:
 - lRStar:
     x: 344
     y: 340
-- upperLstandup:
-    x: 130
-    y: 165
+- rSStandup:
+    x: 396
+    y: 284
 - fiveBankDT5:
     x: 41
     y: 462
@@ -171,9 +126,9 @@ button_locations:
 - ejectHole:
     x: 428
     y: 304
-- s77:
-    x: 211
-    y: 2
+- outHole:
+    x: 214
+    y: 870
 - fiveBankDT3:
     x: 57
     y: 409
@@ -183,9 +138,6 @@ button_locations:
 - rDropTarget3B:
     x: 260
     y: 366
-- s84:
-    x: 80
-    y: 39
 - rsStandupCen:
     x: 384
     y: 329
@@ -519,8 +471,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 253
+    y: 844
 - leftSpecial:
     color_off:
       b: 0
@@ -552,8 +504,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 285
+    y: 12
 - bonus10000:
     color_off:
       b: 0
@@ -585,8 +537,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 154
+    y: 23
 - fiveBank1Arrow:
     color_off:
       b: 0
@@ -640,8 +592,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 39
+    y: 34
 - rightSpecial:
     color_off:
       b: 0
@@ -783,8 +735,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 77
+    y: 32
 - spinnerAndRollover:
     color_off:
       b: 0
@@ -860,8 +812,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 441
+    y: 29
 - gameOver:
     color_off:
       b: 0
@@ -871,8 +823,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 449
+    y: 81
 - superFLASH:
     color_off:
       b: 0
@@ -893,8 +845,8 @@ lamp_locations:
       b: 255
       g: 255
       r: 0
-    x: 0
-    y: 0
+    x: 120
+    y: 31
 - thunder:
     color_off:
       b: 0

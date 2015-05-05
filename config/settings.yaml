@@ -1,0 +1,10 @@
+#####
+##### FLASH game settings
+#####
+#####
+highScore0: 550000
+highScore1: 400000
+highScore2: 300000
+highScore3: 250000
+
+ballsPerGame: 3
