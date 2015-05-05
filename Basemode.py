@@ -148,7 +148,39 @@ class BaseGameMode(game.Mode):
     def end_game(self):
         self.log.info('game ended')
         self.game.coils.flipperEnable.disable()
+        self.game.checkHighScore()
         self.game.reset()
+        
+    def checkHighScore(self):
+        #the purpose of this function to to check to see if any of the players has beaten the high score
+        #and then record the new high score
+        
+        for each player in self.game.players:
+            if player.score > self.game.game_data['highScore0']:
+                #if this is true, the old high scores need to get moved down one place
+                #and new high score needs to get put into top slot (highScore0)
+                self.game.game_data['highScore3'] = self.game.game_data['highScore2']
+                self.game.game_data['highScore2'] = self.game.game_data['highScore1']
+                self.game.game_data['highScore1'] = self.game.game_data['highScore0']
+                self.game.game_data['highScore0'] = player.score
+            
+            elif player.score > self.game.game_data['highScore1']:
+                self.game.game_data['highScore3'] = self.game.game_data['highScore2']
+                self.game.game_data['highScore2'] = self.game.game_data['highScore1']
+                self.game.game_data['highScore1'] = player.score
+  
+            elif player.score > self.game.game_data['highScore2']:
+                self.game.game_data['highScore3'] = self.game.game_data['highScore2']
+                self.game.game_data['highScore2'] = player.score
+                
+            elif player.score > self.game.game_data['highScore3']:
+                self.game.game_data['highScore3'] = player.score
+        
+        #now you need to save the new data
+        curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+        game_data_path = curr_file_path + "\config\game_data.yaml"
+        
+        self.game.save_game_data(game_data_path)
         
     def reset():
         self.game.ball = 0
