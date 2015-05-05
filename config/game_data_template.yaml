@@ -1,10 +1,12 @@
 #####
-##### FLASH game settings
+##### FLASH game data file
 #####
 #####
+# High Scores
 highScore0: 550000
 highScore1: 400000
 highScore2: 300000
 highScore3: 250000
 
+#balls per game
 ballsPerGame: 3
