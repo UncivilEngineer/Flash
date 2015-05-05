@@ -73,35 +73,87 @@ class UtilitiesMode(game.Mode):
             return 0
         
 ### display drivers #########################################
-        
+
+#### This function turns all displays on, needed to initialize the displays
     def allDisplaysOn(self):
         display_board.write("<G>")
         self.log.info("all displays on")
         
-    
+#### This function turns all displays off
     def allDisplaysOff(self):
         display_board.write("<B>")
         self.log.info("all displays off")
    
     def displayOff(self, displayName):
-        if displayName == 'p1':
+        if displayName == 'P1':
             self.log.info("display 1 off called")
             display_board.write("<P1BBBBBB>")
-        elif displayName == 'p2':
+        elif displayName == 'P2':
             self.log.info("display 2 off called")
             display_board.write("<P2BBBBBB>")
-        elif displayName == 'p3':
+        elif displayName == 'P3':
             self.log.info("display 3 off called")
             display_board.write("<P3BBBBBB>")
-        elif displayName == 'p4':
+        elif displayName == 'P4':
             self.log.info("display 4 off called")
             display_board.write("<P4BBBBBB>")
-        elif displayName == 'm1':
+        elif displayName == 'M1':
             display_board.write("<M1BB>")
-        elif displayName == 'm2':
+        elif displayName == 'M2':
             display_board.write("<M2BB>")
         else:
             self.log.info("Bad displayoff call")
+            
+    ### function for sending raw data to a display
+    ## this function was written after updateScoreDisplay, so much of code is recycled
+    def updateDisplay(self, displayName, displayValue):
+        
+        ## pre defined display templates
+        if displayName == 'P1':
+            output_template = '<P1BBBBBB>'
+            template_len = 9
+        elif displayName == 'P2':
+            output_template = '<P2BBBBBB>'
+            template_len = 9
+        elif displayName == 'P3':
+            output_template = '<P3BBBBBB>'
+            template_len = 9
+        elif displayName == 'P4':
+            output_template = '<P4BBBBBB>'
+            template_len = 9
+        elif displayName == 'M1':
+            output_template = '<M1BB>'
+            template_len = 5
+        elif displayName == 'M2':
+            output_template = '<M2BB>'
+            template_len = 5
+        else:
+            print "Bad display write call"
+            badstring = "Name value is: " + displayName
+            print badstring
+            return            
+        
+        #First you have to convert the templante,
+        #and the score value to a list
+        template_list = list(output_template)
+        display_string = str(displayValue) 
+        display_list = list(score_string)
+        
+        #now you have to do the list item swaps
+        #it starts with getting the lenght of the display string
+        display_len = len(display_string)
+        #Y is needed to set through the display list
+        y = 0
+        #set through the numbers to replace, and swap them out
+        for x in range(template_len - display_len , template_len):
+            template_list[x] = display_list[y]
+            y = y + 1
+            
+        #write results to an output string
+        output_string = "".join(template_list)
+        ##print "output_string is:", output_string
+        #send to display board
+        display_board.write(output_string)        
 
 ##### This is the big one, this one updates the display given a string, used for
 ##### updating scores only
