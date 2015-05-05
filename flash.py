@@ -73,8 +73,8 @@ class FLASH(game.BasicGame):
     def reset(self):
         super(FLASH, self).reset()
         logging.info('reset called in class')
-        self.game.old_players = []
-        self.game.old_players = self.game.players[:]
+        self.old_players = []
+        self.old_players = self.game.players[:]
         self.ball = 0
         self.players = []
         self.current_player_index = 0
