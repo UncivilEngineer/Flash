@@ -73,6 +73,8 @@ class FLASH(game.BasicGame):
     def reset(self):
         super(FLASH, self).reset()
         logging.info('reset called in class')
+        self.game.old_players = []
+        self.game.old_players = self.game.players[:]
         self.ball = 0
         self.players = []
         self.current_player_index = 0
@@ -96,8 +98,8 @@ class FLASH(game.BasicGame):
         self.modes.add(self.jetbumper_mode)
         self.modes.add(self.droptarget_mode)
         self.modes.add(self.osc)
-        
-        
+        ## update ball display
+        self.game.utilities.updateDisplay('M1', self.game.ball)
 
         
     def create_player(self, name):
