@@ -467,6 +467,7 @@ class DropTargetMode(game.Mode):
                 self.game.lamps.extraBallEjectHole.schedule(schedule = 0xff00ff00, cycle_seconds = 2, now = False)
                 self.game.utilities.set_player_stats('extra_balls', 1 , 'add')
                 self.game.lamps.shootAgainP.enable()
+                self.game.lamps.samePlayerShootAgain.enable()
             else:
                 ## extra ball has already been awarded
                 self.game.utilities.score(20000)

@@ -83,7 +83,8 @@ class UtilitiesMode(game.Mode):
     def allDisplaysOff(self):
         display_board.write("<B>")
         self.log.info("all displays off")
-   
+
+#### this function blanks out a display
     def displayOff(self, displayName):
         if displayName == 'P1':
             self.log.info("display 1 off called")
@@ -103,6 +104,14 @@ class UtilitiesMode(game.Mode):
             display_board.write("<M2BB>")
         else:
             self.log.info("Bad displayoff call")
+            
+#### this function clears all of the score displays
+    def clearAllScoreDisplays(self):
+        display_board.write("<P1BBBBBB>")
+        display_board.write("<P2BBBBBB>")
+        display_board.write("<P3BBBBBB>")
+        display_board.write("<P4BBBBBB>")
+        
             
     ### function for sending raw data to a display
     ## this function was written after updateScoreDisplay, so much of code is recycled
@@ -137,7 +146,7 @@ class UtilitiesMode(game.Mode):
         #and the score value to a list
         template_list = list(output_template)
         display_string = str(displayValue) 
-        display_list = list(score_string)
+        display_list = list(display_string)
         
         #now you have to do the list item swaps
         #it starts with getting the lenght of the display string

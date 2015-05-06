@@ -3,10 +3,10 @@
 #####
 #####
 # High Scores
-highScore0: 550000
-highScore1: 400000
-highScore2: 300000
-highScore3: 250000
+highScore0: 15000
+highScore1: 10000
+highScore2: 0
+highScore3: 0
 
 #balls per game
 ballsPerGame: 3

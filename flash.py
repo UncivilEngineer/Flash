@@ -74,7 +74,7 @@ class FLASH(game.BasicGame):
         super(FLASH, self).reset()
         logging.info('reset called in class')
         self.old_players = []
-        self.old_players = self.game.players[:]
+        self.old_players = self.players[:]
         self.ball = 0
         self.players = []
         self.current_player_index = 0
@@ -98,8 +98,7 @@ class FLASH(game.BasicGame):
         self.modes.add(self.jetbumper_mode)
         self.modes.add(self.droptarget_mode)
         self.modes.add(self.osc)
-        ## update ball display
-        self.game.utilities.updateDisplay('M1', self.game.ball)
+
 
         
     def create_player(self, name):
@@ -119,16 +118,84 @@ class Attract(game.Mode):
         self.log.info("attract mode initilized")
 
     def mode_started(self):
+        ### make sure all light from the game are off:
+        for lamp in self.game.lamps:
+            lamp.disable()
+        ## start lamps show
         self.game.lampctrl.play_show('attractShow1', repeat = True )
+        ## turn the displays on
         self.game.utilities.allDisplaysOn()
-
+        
+        ##start the game over lamps
+        self.game.lamps.gameOver.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = True)
+        self.game.lamps.canPlay1.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = True)
+        self.game.lamps.canPlay2.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = True)
+        self.game.lamps.canPlay3.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = True)
+        self.game.lamps.canPlay4.schedule(schedule = 0xff00ff00, cycle_seconds = 0, now = True)
+        
+        ### starts looping the high scores through the displays
+        self.highScoreDisplay()
+        
+    def highScoreDisplay(self):
+        self.game.lamps.highScore.enable()
+        
+        self.game.utilities.updateDisplay('P1', self.game.game_data['highScore0'])
+        self.game.utilities.updateDisplay('P2', self.game.game_data['highScore1'])
+        self.game.utilities.updateDisplay('P3', self.game.game_data['highScore2'])
+        self.game.utilities.updateDisplay('P4', self.game.game_data['highScore3'])
+        
+        ### now schedule the last players score to display
+        self.delay('display loop', delay = 2, handler = self.lastScoreDisplay)
+        
+    def lastScoreDisplay(self):
+        ## first clear all displays
+        self.game.utilities.clearAllScoreDisplays()
+        
+        ## turn off the high score lamp
+        self.game.lamps.highScore.disable()
+        
+        numberOfOldPlayers = len(self.game.old_players)
+        self.log.info("old player len is: " +str(len(self.game.old_players)))
+        ## when the game first starts, there will be no value in old players (len == 0)
+        ## so you have to fake the values for the attract mode
+        if numberOfOldPlayers == 0:
+            self.game.utilities.updateDisplay('P1', 0)
+            self.game.utilities.updateDisplay('P2', 0)
+            self.game.utilities.updateDisplay('P3', 0)
+            self.game.utilities.updateDisplay('P4', 0)            
+        elif numberOfOldPlayers == 1:
+            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)
+        elif numberOfOldPlayers == 2:
+            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
+            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)
+        elif numberOfOldPlayers == 3:
+            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
+            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)            
+            self.game.utilities.updateDisplay('P3', self.game.old_players[2].score)
+        elif numberOfOldPlayers == 4:
+            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
+            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)            
+            self.game.utilities.updateDisplay('P3', self.game.old_players[2].score)
+            self.game.utilities.updateDisplay('P4', self.game.old_players[3].score)
+            
+        #### after displaying, return to highscoredisplay
+        self.delay('display loop', delay = 2, handler = self.highScoreDisplay)
+        
 
     def mode_stopped(self): 
         self.log.info("Stop attract mode")
         self.game.lampctrl.stop_show()
         for lamp in self.game.lamps: 
             lamp.disable() 
+        
+        ## stop the display loop
+        self.cancel_delayed('display loop')
+        ## clear the score displays
+        self.game.utilities.clearAllScoreDisplays()
     
+##### main game loop
+        
+
 
 def main():
     game = None

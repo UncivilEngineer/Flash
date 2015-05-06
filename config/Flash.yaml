@@ -5,12 +5,12 @@ PRGame:
     #machinetype: wpcAlphanumeric
     numBalls: 1
 PRFlippers:
-PRBumpers:
-   - leftKicker
-   - rightKicker
-   - rightJetBumper
-   - leftJetBumper
-   - lowerJetBumper
+#PRBumpers:
+#   - leftKicker
+#   - rightKicker
+#   - rightJetBumper
+#   - leftJetBumper
+#   - lowerJetBumper
 
 PRSwitches:
     # **** Format ****
@@ -365,7 +365,7 @@ PRLamps:
         label: 'Five Bank 2 Arrow'
     fiveBank1Arrow:
         number: L45
-        label: 'Five Bank 1 Arrow (bottom)'
+        label: 'Five Bank 1 Arrow (top)'
     threeBankRArrow:
         number: L46
         label: 'Three Bank Right Arrow'
@@ -449,10 +449,10 @@ PRLamps:
     player2Up:
         number: L82
         label: 'Player 2 Up'
-    Player3Up:
+    player3Up:
         number: L83
         label: 'Player 3 Up'
-    Player4Up:
+    player4Up:
         number: L84
         label: 'Player 4 Up'
     tilt:

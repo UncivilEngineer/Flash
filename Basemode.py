@@ -11,10 +11,15 @@ import locale
 from player import *
 import bonus
 import logging
+import os
+
 
 
 
 class BaseGameMode(game.Mode): 
+    
+    playerlights = []
+    
     def __init__(self, game, priority):  
         super(BaseGameMode, self).__init__(game, priority)
 
@@ -25,7 +30,13 @@ class BaseGameMode(game.Mode):
 
     def mode_started(self):
         logging.info("basegame mode started")
-
+        self.game.utilities.updateDisplay('M1', 0)
+        
+        ## load up the playerlight array for future use
+        self.playerlights.append(self.game.lamps.player1Up)
+        self.playerlights.append(self.game.lamps.player2Up)
+        self.playerlights.append(self.game.lamps.player3Up)
+        self.playerlights.append(self.game.lamps.player4Up)
         
 
 ###########################################
@@ -63,6 +74,7 @@ class BaseGameMode(game.Mode):
         self.game.utilities.displayOff('P4')
         
         self.game.lamps.canPlay1.enable()
+        self.game.lamps.player1Up.enable()
 
         ##### Remove attract mode  #####
         self.game.modes.remove(self.game.attract_mode)
@@ -76,6 +88,7 @@ class BaseGameMode(game.Mode):
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')
         self.start_ball()
         self.game.ball = self.game.ball + 1
+        self.game.utilities.updateDisplay('M1', self.game.ball)
 
     def start_ball(self):
         
@@ -83,6 +96,7 @@ class BaseGameMode(game.Mode):
         #### for now it's empty 
         #### cycle ball display
         self.game.utilities.updateDisplay('M1', self.game.ball)
+        self.game.lamps.ballInPlay.enable()
         #### enable the flipper coils
         self.game.coils.flipperEnable.enable()
 
@@ -101,6 +115,14 @@ class BaseGameMode(game.Mode):
         self.log.info('ball started: ' +str(self.game.ball))
         self.game.sound.playsound(17)
         
+        ## set player lights
+        ## first turn them all off
+        for lamp in self.playerlights:
+            lamp.disable()
+            
+        ## now turn the current player lamp on based on the player index
+        self.playerlights[self.game.current_player_index].enable()
+        
         
     def kickBallOut(self):
         self.log.info('kickout pulsed')
@@ -110,6 +132,7 @@ class BaseGameMode(game.Mode):
         #### first thing we do is disable the fippers
         self.log.info('ball drained, in endball')
         self.game.coils.flipperEnable.disable()
+        self.game.lamps.ballInPlay.disable()
         self.game.utilities.set_player_stats('ball_in_play',False)
 
         self.game.bonus.award_bonus()
@@ -127,6 +150,7 @@ class BaseGameMode(game.Mode):
             
             if eb - 1 == 0:
                 self.game.lamps.shootAgainP.disable()
+                self.game.lamsp.samePlayerShootAgain.disable()
             
             self.start_ball()
 
@@ -154,14 +178,14 @@ class BaseGameMode(game.Mode):
     def end_game(self):
         self.log.info('game ended')
         self.game.coils.flipperEnable.disable()
-        self.game.checkHighScore()
+        self.checkHighScore()
         self.game.reset()
         
     def checkHighScore(self):
         #the purpose of this function to to check to see if any of the players has beaten the high score
         #and then record the new high score
         
-        for each player in self.game.players:
+        for player in self.game.players:
             if player.score > self.game.game_data['highScore0']:
                 #if this is true, the old high scores need to get moved down one place
                 #and new high score needs to get put into top slot (highScore0)
