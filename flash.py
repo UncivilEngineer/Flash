@@ -87,7 +87,7 @@ class FLASH(game.BasicGame):
         self.attract_mode = Attract(self,3)
         self.jetbumper_mode = JetBumper(self,7)
         self.droptarget_mode = DropTargetMode(self,8)
-        self.osc = modes.OSC_Mode(game = self, priority = 1, closed_switches = 'outHole')
+        #self.osc = modes.OSC_Mode(game = self, priority = 1, closed_switches = 'outHole')
 
         ###add modes to que
         self.modes.add(self.attract_mode)
@@ -97,7 +97,7 @@ class FLASH(game.BasicGame):
         self.modes.add(self.sound)
         self.modes.add(self.jetbumper_mode)
         self.modes.add(self.droptarget_mode)
-        self.modes.add(self.osc)
+        #self.modes.add(self.osc)
 
 
         
@@ -154,29 +154,18 @@ class Attract(game.Mode):
         ## turn off the high score lamp
         self.game.lamps.highScore.disable()
         
-        numberOfOldPlayers = len(self.game.old_players)
-        self.log.info("old player len is: " +str(len(self.game.old_players)))
-        ## when the game first starts, there will be no value in old players (len == 0)
-        ## so you have to fake the values for the attract mode
-        if numberOfOldPlayers == 0:
-            self.game.utilities.updateDisplay('P1', 0)
-            self.game.utilities.updateDisplay('P2', 0)
-            self.game.utilities.updateDisplay('P3', 0)
-            self.game.utilities.updateDisplay('P4', 0)            
-        elif numberOfOldPlayers == 1:
-            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)
-        elif numberOfOldPlayers == 2:
-            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
-            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)
-        elif numberOfOldPlayers == 3:
-            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
-            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)            
-            self.game.utilities.updateDisplay('P3', self.game.old_players[2].score)
-        elif numberOfOldPlayers == 4:
-            self.game.utilities.updateDisplay('P1', self.game.old_players[0].score)            
-            self.game.utilities.updateDisplay('P2', self.game.old_players[1].score)            
-            self.game.utilities.updateDisplay('P3', self.game.old_players[2].score)
-            self.game.utilities.updateDisplay('P4', self.game.old_players[3].score)
+        
+        if self.game.game_data['lastScore0'] > 0:
+            self.game.utilities.updateDisplay('P1', self.game.game_data['lastScore0'])            
+    
+        if self.game.game_data['lastScore1'] > 0:
+            self.game.utilities.updateDisplay('P2', self.game.game_data['lastScore1'])
+            
+        if self.game.game_data['lastScore2'] > 0:
+            self.game.utilities.updateDisplay('P3', self.game.game_data['lastScore2'])        
+        
+        if self.game.game_data['lastScore3'] > 0:
+            self.game.utilities.updateDisplay('P4', self.game.game_data['lastScore3'])        
             
         #### after displaying, return to highscoredisplay
         self.delay('display loop', delay = 2, handler = self.highScoreDisplay)

@@ -27,6 +27,7 @@ class Sound(game.Mode):
     def soundtest(self):
         self.log.info("sound test called, x is: " +str(self.soundCount))
         if self.soundCount < 32:
+            self.game.utilities.updateDisplay('M2', self.soundCount)
             self.playsound(self.soundCount)
             self.delay(name='soundtest', event_type=None, delay=2, handler=self.dosoundtest)
         else:
@@ -52,7 +53,7 @@ class Sound(game.Mode):
 
             inputString = bin(x)[2:].zfill(5)
             #self.log.info("call for sound " +str(x))
-            print("playing sound " +str(x))
+            #print("playing sound " +str(x))
 
             ### Now check for 1s, and schedule coils if it is present, note we are working
             ### from right to left, starting at index 4, there has to be a seperate if call
@@ -60,19 +61,19 @@ class Sound(game.Mode):
 
             if inputString[4] == '1':
                 #self.game.coils.soundC09.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
-                self.game.coils.soundC09.pulse(1)
+                self.game.coils.soundC09.pulse(2)
             if inputString[3] == '1':
                 #self.game.coils.soundC10.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
-                self.game.coils.soundC10.pulse(1)
+                self.game.coils.soundC10.pulse(2)
             if inputString[2] == '1':
                 #self.game.coils.soundC11.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
-                self.game.coils.soundC11.pulse(1)
+                self.game.coils.soundC11.pulse(2)
             if inputString[1] == '1':
                 #self.game.coils.soundC12.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
-                self.game.coils.soundC12.pulse(1)
+                self.game.coils.soundC12.pulse(2)
             if inputString[0] == '1':
                 #self.game.coils.soundC13.schedule(schedule=0xf000000, cycle_seconds=1, now=False)
-                self.game.coils.soundC13.pulse(1)
+                self.game.coils.soundC13.pulse(2)
         else:
             self.log.info('bad call to playsound ' +str(x)+ 'was sent')
             

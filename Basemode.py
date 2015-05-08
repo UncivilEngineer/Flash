@@ -30,7 +30,7 @@ class BaseGameMode(game.Mode):
 
     def mode_started(self):
         logging.info("basegame mode started")
-        self.game.utilities.updateDisplay('M1', 0)
+        self.game.utilities.updateDisplay('M2', 0)
         
         ## load up the playerlight array for future use
         self.playerlights.append(self.game.lamps.player1Up)
@@ -88,14 +88,14 @@ class BaseGameMode(game.Mode):
         self.log.info('Starting '+str(self.game.balls_per_game)+ ' ball game')
         self.start_ball()
         self.game.ball = self.game.ball + 1
-        self.game.utilities.updateDisplay('M1', self.game.ball)
+        self.game.utilities.updateDisplay('M2', self.game.ball)
 
     def start_ball(self):
         
         ####This should be where a ball save mode is added to the que
         #### for now it's empty 
         #### cycle ball display
-        self.game.utilities.updateDisplay('M1', self.game.ball)
+        self.game.utilities.updateDisplay('M2', self.game.ball)
         self.game.lamps.ballInPlay.enable()
         #### enable the flipper coils
         self.game.coils.flipperEnable.enable()
@@ -179,6 +179,7 @@ class BaseGameMode(game.Mode):
         self.log.info('game ended')
         self.game.coils.flipperEnable.disable()
         self.checkHighScore()
+        self.writeOldScores()
         self.game.reset()
         
     def checkHighScore(self):
@@ -211,7 +212,47 @@ class BaseGameMode(game.Mode):
         game_data_path = curr_file_path + "\config\game_data.yaml"
         
         self.game.save_game_data(game_data_path)
+        
+    def writeOldScores(self):
+        ## we first need to know how many players were in the last game
+        numberOfOldPlayers = len(self.game.players)
+        self.log.info("number of players was: " + str(len(self.game.players)))
+        self.log.info("score0 was: " + str(self.game.players[0].score))
+        
+        if numberOfOldPlayers == 1:
+            ## last game was single player
+            self.game.game_data['lastScore0'] = self.game.players[0].score
+            self.game.game_data['lastScore1'] = 0
+            self.game.game_data['lastScore2'] = 0
+            self.game.game_data['lastScore3'] = 0
+        
+        elif numberOfOldPlayers == 2:
+            ## last game was a two player game
+            self.game.game_data['lastScore0'] = self.game.players[0].score
+            self.game.game_data['lastScore1'] = self.game.players[1].score
+            self.game.game_data['lastScore2'] = 0
+            self.game.game_data['lastScore3'] = 0            
+        
+        elif numberOfOldPlayers == 3:
+            ## last game was a three player game
+            self.game.game_data['lastScore0'] = self.game.players[0].score
+            self.game.game_data['lastScore1'] = self.game.players[1].score
+            self.game.game_data['lastScore2'] = self.game.players[2].score
+            self.game.game_data['lastScore3'] = 0  
+            
+        elif numberOfOldPlayers == 4:
+            ## last game was a two player game
+            self.game.game_data['lastScore0'] = self.game.players[0].score
+            self.game.game_data['lastScore1'] = self.game.players[1].score
+            self.game.game_data['lastScore2'] = self.game.players[2].score
+            self.game.game_data['lastScore3'] = self.game.players[3].score
 
+        #now you need to save the new data
+        curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+        game_data_path = curr_file_path + "\config\game_data.yaml"
+        self.game.save_game_data(game_data_path)
+
+        
 ##### this section removed because it was duplicated in flash.py        
 #    def reset():
 #        self.game.ball = 0
@@ -246,11 +287,11 @@ class BaseGameMode(game.Mode):
 
 #### basic Kicker score handling #####################
         
-    def sw_leftKicker_active(self, sw):
+    def sw_leftKicker_active_for_10ms(self, sw):
         self.game.utilities.score(100)
         self.game.sound.playsound(3)
     
-    def sw_rightKicker_active(self,sw):
+    def sw_rightKicker_active_for_10ms(self,sw):
         self.game.utilities.score(100)
         self.game.sound.playsound(3)
         

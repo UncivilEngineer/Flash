@@ -217,54 +217,50 @@ class BonusGameMode(game.Mode):
 #########################################################
 
 
-    def sw_rollover1_active_for_10ms(self, sw):
+    def sw_rollover1_closed_for_20ms(self, sw):
         if self.rollOverStatus1 == False:
             self.rollOverValue = self.rollOverValue + 1
             self.game.lamps.rollOver1.enable()
             self.rollOverStatus1 = True
             self.checkRollOver()
-        else:
-            self.game.utilities.score(1000)
         
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
         self.update_bonus_lights_basic()
+        self.game.utilities.score(1000)
 
 
             
-    def sw_rollover2_active_for_10ms(self, sw):
+    def sw_rollover2_closed_for_20ms(self, sw):
         if self.rollOverStatus2 == False:
             self.rollOverValue = self.rollOverValue + 1
             self.game.lamps.rollOver2.enable()
             self.rollOverStatus2 = True
             self.checkRollOver()
-        else:
-            self.game.utilities.score(2000) 
 
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
-        self.update_bonus_lights_basic()           
+        self.update_bonus_lights_basic()
+        self.game.utilities.score(2000)
         
 
-    def sw_rollover3_active_for_10ms(self, sw):
+    def sw_rollover3_closed_for_20ms(self, sw):
         if self.rollOverStatus3 == False:
             self.rollOverValue = self.rollOverValue + 1
             self.game.lamps.rollOver3.enable()
             self.rollOverStatus3 = True
             self.checkRollOver()
-        else:
-            self.game.utilities.score(3000)
  
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
         self.update_bonus_lights_basic()
+        self.game.utilities.score(3000)
 
 
-    def sw_rollover4_active_for_10ms(self, sw):
+    def sw_rollover4_closed_for_20ms(self, sw):
         if self.rollOverStatus4 == False:
             self.rollOverValue = self.rollOverValue + 1
             self.game.lamps.rollOver4.enable()
             self.rollOverStatus4 = True
             self.checkRollOver()
-        else:
-            self.game.utilities.score(4000) 
          
         self.game.utilities.set_player_stats('bonus', 1000, 'add')
         self.update_bonus_lights_basic()
+        self.game.utilities.score(4000)

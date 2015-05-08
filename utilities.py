@@ -116,7 +116,7 @@ class UtilitiesMode(game.Mode):
     ### function for sending raw data to a display
     ## this function was written after updateScoreDisplay, so much of code is recycled
     def updateDisplay(self, displayName, displayValue):
-        
+        self.log.info("Display update: " +displayName +" value: " + str(displayValue))
         ## pre defined display templates
         if displayName == 'P1':
             output_template = '<P1BBBBBB>'
