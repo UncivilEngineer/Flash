@@ -29,6 +29,7 @@ attractLampShow1 = curr_file_path + "\Assets\AttractLampShow1.lampshow"
 #################################### MODE IMPORTS####################################
 
 from sound import *
+from utilities import *
 
 ################################################ GAME CLASS################################################
 class FLASH(game.BasicGame):
@@ -64,16 +65,18 @@ class FLASH(game.BasicGame):
         self.current_player_index = 0
 
         #### Mode Definitions #### 
-       #self.utilities = UtilitiesMode(self,0) 
+        self.utilities = UtilitiesMode(self,99) 
        #self.base_mode = BaseGameMode(self,3) 
         self.attract_mode = Attract(self,5)
 	self.sound_mode = Sound(self,10)
 
-        ###add modes to que	
+        ###add modes to que
+	self.modes.add(self.utilities)
         self.modes.add(self.attract_mode)
 	self.modes.add(self.sound_mode)
-       #self.modes.add(self.base_mode)
 
+        self.utilities.allDisplaysOn()
+	self.utilities.updateDisplay('P1', '0075')
 #    def create_player(self, name):
 #        return Player(name)
 
@@ -105,7 +108,8 @@ class Attract(game.Mode):
         self.log = logging.getLogger('flash.attractmode')
         self.log.info("attract mode initilized")
 
-    def mode_started(self):	    
+    def mode_started(self):
+	self.game.utilities.allDisplaysOn()
         # This is a simple light show, works well.	    
         i = 0	    
         self.log.info("Start basic attract show")
@@ -128,22 +132,30 @@ class Attract(game.Mode):
                 lamp.schedule(schedule=0x00000fff, cycle_seconds=0, now=False)
             i = i + 1
         #self.game.lampctrl.play_show('attractShow1', repeat = True )
-	self.game.sound_mode.playsound(17)
-	self.delay('sound1', delay = 5, handler = self.soundbackup)
+	self.game.sound_mode.playsound(16)
+	self.delay('sound1', delay = 2, handler = self.soundbackup)
     
     def soundbackup(self):
 	self.game.sound_mode.playsound(18)
-	self.delay('sound2', delay = 5, handler = self.soundbackup2)
+	self.delay('sound2', delay = .1, handler = self.soundbackup2)
     
     def soundbackup2(self):
+	self.game.sound_mode.playsound(18)
+	self.delay('sound2', delay = .1, handler = self.soundbackup3)
+	
+    def soundbackup3(self):
+	self.game.sound_mode.playsound(18)
+	self.delay('sound3', delay = 2, handler = self.soundbackup4)
+    
+    def soundbackup4(self):
 	self.game.sound_mode.playsound(19)
-
+	
     def sw_startButton_active_for_20ms(self, sw):
 	self.log.info("start button pressed")
 	for lamp in self.game.lamps:
 	    lamp.disable()
 	    
-	#self.game.coils.flipperEnable.enable()
+	self.game.coils.flashStrobe.pulse(30)
 	#self.game.enable_bumpers(enable = True)
 	
 	#self.game.coils.ballRelease.pulse(25)

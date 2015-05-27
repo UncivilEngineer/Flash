@@ -66,13 +66,6 @@ class BaseGameMode(game.Mode):
     def start_game(self):
         self.log.info('Start Game')
         
-        ### start up displays
-        self.game.utilities.allDisplaysOn()
-        self.game.utilities.updateDisplay('P1', 0)
-        self.game.utilities.displayOff('P2')
-        self.game.utilities.displayOff('P3')
-        self.game.utilities.displayOff('P4')
-        
         self.game.lamps.canPlay1.enable()
         self.game.lamps.player1Up.enable()
 
@@ -82,6 +75,12 @@ class BaseGameMode(game.Mode):
         self.game.lampctrl.stop_show()
         ### adds player for player 1 game
         self.game.add_player()
+        ### start up displays
+        self.game.utilities.allDisplaysOn() 
+        self.game.utilities.updateDisplay('P1', 0)
+        self.game.utilities.displayOff('P2')
+        self.game.utilities.displayOff('P3')
+        self.game.utilities.displayOff('P4')        
         
         
         self.game.balls_per_game = 3 ###This needs to get moved to an user setting file
